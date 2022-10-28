@@ -17,3 +17,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.circle-bg {
+  background: radial-gradient(#ff4da355, #ff9aa626);
+  filter:blur(100px);
+  /* filter: contrast(170%) brightness(1000%);   */
+}
