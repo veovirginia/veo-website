@@ -30,7 +30,7 @@ export default function Register() {
             <div className="text-center">
                <h1 className="text-4xl font-semibold text-white mx-auto">
                   Welcome to{" "}
-                  <span className="bg-gradient-to-r from-red-500 to-blue-500 overflow-visible bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
                      VEO
                   </span>
                </h1>
@@ -53,7 +53,7 @@ export default function Register() {
                />
             </div>
             {/* Hover animating gradient */}
-            <button className="w-full p-2 bg-gradient-to-l rounded from-[#741DE2] to-[#136CD6] text-white flex justify-center items-center space-x-2">
+            <button className="w-full p-2 rounded bg-white text-black flex justify-center items-center space-x-2">
                <BiLockAlt className="h-5 w-5" />
                <span>Create account</span>
             </button>
