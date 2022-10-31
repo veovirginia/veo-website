@@ -14,7 +14,7 @@ module.exports = {
             "light-background": "#1F1F1F",
             "light-background-border": "#373637",
             "label-text": "#CCCCCC",
-            "input-text": "#9B9B9B",
+            "input-text": "#757575",
          },
       },
    },

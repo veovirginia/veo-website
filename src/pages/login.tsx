@@ -23,11 +23,11 @@ export default function Login() {
             </div>
             <div className="pt-10 space-y-4 pb-12">
                <Input
-                  title="Email"
+                  label="Email"
                   placeholder="johndoe@email.com"
                   type="text"
                />
-               <Input title="Password" placeholder="********" type="password" />
+               <Input label="Password" placeholder="********" type="password" />
             </div>
             {/* Hover animating gradient */}
             <button className="w-full p-2 rounded bg-white text-black flex justify-center items-center space-x-2">

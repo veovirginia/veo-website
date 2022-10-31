@@ -22,15 +22,15 @@ export default function Register() {
                </p>
             </div>
             <div className="pt-10 space-y-4 pb-12">
-               <Input title="Full Name" placeholder="John Doe" type="text" />
+               <Input label="Full Name" placeholder="John Doe" type="text" />
                <Input
-                  title="Email"
+                  label="Email"
                   placeholder="johndoe@email.com"
                   type="text"
                />
-               <Input title="Password" placeholder="********" type="password" />
+               <Input label="Password" placeholder="********" type="password" />
                <Input
-                  title="Confirm Password"
+                  label="Confirm Password"
                   placeholder="********"
                   type="password"
                />
