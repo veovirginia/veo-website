@@ -13,9 +13,7 @@ export default function Register() {
                <h1 className="text-4xl font-semibold text-white mx-auto">
                   Welcome to
                   {/* Animating gradient? */}
-                  <span className="ml-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
-                     VEO
-                  </span>
+                  <span className="ml-2">VEO</span>
                </h1>
                <p className="text-lg pt-2 text-white opacity-60">
                   The premiere entrepreneurship organization
