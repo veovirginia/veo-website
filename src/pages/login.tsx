@@ -30,7 +30,7 @@ export default function Login() {
                <Input label="Password" placeholder="********" type="password" />
             </div>
             {/* Hover animating gradient */}
-            <button className="w-full p-2 rounded bg-white text-black flex justify-center items-center space-x-2">
+            <button className="w-full p-3 rounded bg-white text-black flex justify-center items-center space-x-2">
                <BiDoorOpen className="h-5 w-5" />
                <span>Access Dashboard</span>
             </button>

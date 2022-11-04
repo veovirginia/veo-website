@@ -9,7 +9,7 @@ export default function StepOne() {
             title="Tell us about yourself"
             description="Some short description here about this page."
          />
-         <div className="grid grid-cols-2 gap-6 pt-16">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-16">
             <Input
                label="Phone Number"
                placeholder="(123) 456 7890"
