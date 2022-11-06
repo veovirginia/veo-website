@@ -1,51 +1,60 @@
-import Link from "next/link"
-import Input from "../components/Input"
+import { signIn, getProviders, getCsrfToken, getSession } from "next-auth/react"
 import { BiDoorOpen } from "react-icons/bi"
 import RegisterPattern from "../components/SVG/RegisterPattern"
-import Navbar from "../components/Navbar"
+import { GetServerSidePropsContext } from "next"
+import Layout from "../components/layouts/Layout"
 
-export default function Login() {
+export default function Login({ providers }: any) {
    return (
-      <div className="bg-background w-full min-h-screen relative">
-         <Navbar />
+      <Layout>
          <div className="max-w-md mx-auto pt-32 px-4">
             <div className="text-center">
                <h1 className="text-4xl font-semibold text-white mx-auto">
+                  Welcome to
                   {/* Animating gradient? */}
-                  <span className="mr-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
+                  <span className="ml-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
                      VEO
                   </span>
-                  Access
                </h1>
                <p className="text-lg pt-2 text-white opacity-60">
-                  Login to your account
+                  The premiere entrepreneurship organization
                </p>
             </div>
-            <div className="pt-10 space-y-4 pb-12">
-               <Input
-                  label="Email"
-                  placeholder="johndoe@email.com"
-                  type="text"
-               />
-               <Input label="Password" placeholder="********" type="password" />
-            </div>
-            {/* Hover animating gradient */}
-            <button className="w-full p-2 rounded bg-white text-black flex justify-center items-center space-x-2">
-               <BiDoorOpen className="h-5 w-5" />
-               <span>Access Dashboard</span>
-            </button>
-            <div className="flex justify-center items-center pt-4 space-x-2">
-               <p className="text-white opacity-60">
-                  Don&apos;t have an account?
-               </p>
-               <Link href="/register" passHref>
-                  <p className="cursor-pointer text-[#136CD6]">Register</p>
-               </Link>
+            <div className="space-y-4 pt-24">
+               {/* Hover animating gradient */}
+               <button
+                  onClick={() => signIn(providers.google.id)}
+                  className="w-full p-2 rounded bg-white text-black flex justify-center items-center space-x-2"
+               >
+                  <BiDoorOpen className="h-5 w-5" />
+                  <span>Login with {providers.google.name}</span>
+               </button>
             </div>
          </div>
          <div className="opacity-50 absolute bottom-0 right-0 pointer-events-none">
             <RegisterPattern />
          </div>
-      </div>
+      </Layout>
    )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+   const providers = await getProviders()
+   const { req } = context
+   const session = await getSession({ req })
+
+   if (session) {
+      return {
+         redirect: {
+            destination: "/onboard",
+         },
+      }
+   }
+
+   return {
+      props: {
+         providers: providers,
+         csrfToken: await getCsrfToken(context),
+      },
+   }
 }
