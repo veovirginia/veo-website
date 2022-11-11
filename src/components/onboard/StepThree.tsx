@@ -1,7 +1,7 @@
 import StepHeader from "../StepHeader"
 import { motion } from "framer-motion"
 import { useState } from "react"
-import { InlineWidget, useCalendlyEventListener } from "react-calendly"
+// import { InlineWidget, useCalendlyEventListener } from "react-calendly"
 
 const members = [
    {
@@ -22,12 +22,12 @@ const members = [
 ]
 
 export default function StepThree() {
-   useCalendlyEventListener({
-      onProfilePageViewed: () => console.log("onProfilePageViewed"),
-      onDateAndTimeSelected: () => console.log("onDateAndTimeSelected"),
-      onEventTypeViewed: () => console.log("onEventTypeViewed"),
-      onEventScheduled: (e) => console.log(e.data.payload),
-   })
+   // useCalendlyEventListener({
+   //    onProfilePageViewed: () => console.log("onProfilePageViewed"),
+   //    onDateAndTimeSelected: () => console.log("onDateAndTimeSelected"),
+   //    onEventTypeViewed: () => console.log("onEventTypeViewed"),
+   //    onEventScheduled: (e) => console.log(e.data.payload),
+   // })
 
    return (
       <div>
@@ -37,7 +37,7 @@ export default function StepThree() {
             description="Let us know when you want to meet."
          />
          <div className="space-y-2 py-6">
-            <InlineWidget url="https://calendly.com/veovirginia/20min" />
+            {/* <InlineWidget url="https://calendly.com/veovirginia/20min" /> */}
          </div>
       </div>
    )

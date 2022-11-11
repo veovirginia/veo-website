@@ -42,7 +42,7 @@ export default function Onboard() {
                         onClick={() => step < 3 && setStep(step + 1)}
                         className="rounded bg-white text-black px-16 py-2"
                      >
-                        Continue
+                        {step < 3 ? "Continue" : "Finish"}
                      </button>
                   </div>
                </AnimatePresence>
