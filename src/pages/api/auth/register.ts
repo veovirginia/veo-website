@@ -6,6 +6,7 @@ import {
    validateName,
    hash,
 } from "../../../helpers/auth"
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
 
 export default async function handler(
    req: NextApiRequest,
@@ -27,9 +28,9 @@ export default async function handler(
    const nameError = validateName(account.name)
 
    if (
-      passwordError.length <= 0 ||
-      emailError.length <= 0 ||
-      nameError.length <= 0
+      passwordError.length > 0 ||
+      emailError.length > 0 ||
+      nameError.length > 0
    ) {
       let errors = {
          success: false,
@@ -44,15 +45,21 @@ export default async function handler(
    if (!hashedPassword) {
       res.status(500).json({ error: "Unable to handle request at the moment." })
    }
-   const createAccount = await prisma.user.create({
-      data: {
-         name: "dasd",
-         email: "dad@gmail.com",
-         accountVerified: false,
-         password: hashedPassword,
-         role: "user",
-      },
-   })
+
+   try {
+      await prisma.user.create({
+         data: {
+            name: "dasd",
+            email: "dad@gmail.com",
+            accountVerified: false,
+            password: hashedPassword,
+            role: "user",
+         },
+      })
+   } catch (error: any) {
+      throw error
+   }
+
    res.status(201).json({
       success: true,
       message: "Created user.",
