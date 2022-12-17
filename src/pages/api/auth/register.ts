@@ -6,7 +6,6 @@ import {
    validateName,
    hash,
 } from "../../../helpers/auth"
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
 
 export default async function handler(
    req: NextApiRequest,
