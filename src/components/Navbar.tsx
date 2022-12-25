@@ -5,30 +5,35 @@ import Logo from "./SVG/Logo"
 const Navbar = () => {
    const { data: session } = useSession()
    return (
-      <div className="max-w-5xl mx-auto py-5 flex items-center justify-between px-4">
+      <div className="w-full max-w-5xl mx-auto py-5 flex items-center justify-between px-4">
          <div className="cursor-pointer flex items-center space-x-4 relative">
             <span className="z-10">
                <Logo />
             </span>
-            <h1 className="z-10 font-semibold text-xl text-white tracking-wider">
+            <h1 className="z-10 font-semibold text-lg text-white tracking-wider">
                VEO
             </h1>
-            {/* <div className="opacity-30 absolute -top-[8rem] -left-[8rem] circle-bg h-[24rem] w-[24rem] rounded-full" /> */}
          </div>
-         <div className="flex items-center space-x-8">
+         <div className="flex items-center space-x-8 text-sm">
+            <button onClick={() => console.log(session)}>session</button>
             {session?.user ? (
                <button onClick={() => signOut()} className="text-white">
                   Log out
                </button>
             ) : (
-               <Link href="/register" passHref>
-                  <button
-                     type="button"
-                     className="text-white px-8 py-2 rounded-full bg-transparent border-neutral-700 hover:border-white hover:bg-white hover:text-black transition-colors duration-125 border"
-                  >
-                     Join
-                  </button>
-               </Link>
+               <p className="flex items-center text-neutral-400 space-x-6">
+                  <Link href="/login" passHref>
+                     <p className="cursor-pointer">Login</p>
+                  </Link>
+                  <Link href="/signup" passHref>
+                     <button
+                        type="button"
+                        className="text-zinc-50 px-4 py-2 rounded bg-transparent border-neutral-700 hover:border-zinc-50 hover:bg-zinc-50 hover:text-neutral-900 transition-colors duration-125 border"
+                     >
+                        Signup
+                     </button>
+                  </Link>
+               </p>
             )}
          </div>
       </div>

@@ -7,7 +7,7 @@ export default function StepOne() {
          <StepHeader
             step="1/3"
             title="Tell us about yourself"
-            description="Some short description here about this page."
+            description="Help us get to know you better."
          />
          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-16">
             <Input
