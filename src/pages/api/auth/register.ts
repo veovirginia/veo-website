@@ -6,26 +6,29 @@ import {
    validateName,
    hash,
 } from "../../../helpers/auth"
+import { RegisterBody } from "../../../types/auth"
 
 export default async function handler(
    req: NextApiRequest,
    res: NextApiResponse
 ) {
+   // Check empty body
    if (!req.body) {
-      res.status(400).json({ error: "Empty request body." })
+      return res.status(400).json({ error: "Empty request body." })
    }
 
+   // Check request method
    if (req.method !== "POST") {
-      res.status(405).json({ error: "Invalid HTTP method." })
+      return res.status(405).json({ error: "Invalid HTTP method." })
    }
 
-   // TODO: Add typing to account
-   const account = req.body
+   const account: RegisterBody = req.body
 
    const passwordError = validatePassword(account.password)
    const emailError = await validateEmail(account.email)
    const nameError = validateName(account.name)
 
+   // Validate account details
    if (
       passwordError.length > 0 ||
       emailError.length > 0 ||
@@ -37,19 +40,23 @@ export default async function handler(
          password: passwordError,
          name: nameError,
       }
-      res.status(400).json(errors)
+      return res.status(400).json(errors)
    }
+
+   // Hash password
    const hashedPassword = await hash(account.password)
-
    if (!hashedPassword) {
-      res.status(500).json({ error: "Unable to handle request at the moment." })
+      return res
+         .status(500)
+         .json({ error: "Unable to handle request at the moment." })
    }
 
+   // Create account in DB
    try {
       await prisma.user.create({
          data: {
-            name: "dasd",
-            email: "dad@gmail.com",
+            name: account.name,
+            email: account.email,
             accountVerified: false,
             password: hashedPassword,
             role: "user",
@@ -59,7 +66,8 @@ export default async function handler(
       throw error
    }
 
-   res.status(201).json({
+   // Return creation status
+   return res.status(201).json({
       success: true,
       message: "Created user.",
    })

@@ -9,13 +9,7 @@ export default NextAuth({
    providers: [
       CredentialsProvider({
          name: "Credentials",
-         credentials: {
-            email: {
-               label: "email",
-               type: "text",
-            },
-            password: { label: "password", type: "password" },
-         },
+         credentials: {},
          async authorize(credentials: any, req: any) {
             if (!credentials) {
                throw new Error("Credentials must be provided.")
@@ -38,9 +32,7 @@ export default NextAuth({
 
             if (!isValid) {
                throw new Error("Password not found for user.")
-               return null
             }
-
             return {
                email: user.email,
                name: user.name,
@@ -59,12 +51,22 @@ export default NextAuth({
          session.user.accessToken = token.accessToken
          session.user.refreshToken = token.refreshToken
          session.user.accessTokenExpires = token.accessTokenExpires
-
+         session.user = token.user
          return session
       },
+      async jwt({ token, user, account, profile }: any) {
+         if (user) {
+            token.accessToken = user.accessToken
+            token.refreshToken = user.refreshToken
+            token.accessTokenExpires = user.accessTokenExpires
+            token.id = user.id
+            token.user = user
+         }
+         return token
+      },
    },
-
    session: {
+      strategy: "jwt",
       maxAge: 30 * 24 * 60 * 60,
       updateAge: 24 * 60 * 60,
    },
