@@ -1,9 +1,11 @@
 import { signIn, getCsrfToken, getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import cn from "classnames"
 import AuthLayout from "../components/layouts/AuthLayout"
 import Input from "../components/Input"
-import axios from "axios"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
 import Link from "next/link"
 
 type Inputs = {
@@ -12,14 +14,23 @@ type Inputs = {
    password: string
 }
 
+const schema = yup.object().shape({
+   email: yup.string().email("Invalid email").required("Email required"),
+   password: yup
+      .string()
+      .min(8, "Must be at least 8 characters")
+      .max(32, "Must not exceed 32 characters")
+      .required("Password required"),
+})
+
 export default function Login() {
-   // const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
    const {
       control,
       handleSubmit,
-      formState: { errors },
+      formState: { errors, isValid },
       reset,
-   } = useForm({
+   } = useForm<Inputs>({
+      resolver: yupResolver(schema),
       defaultValues: {
          email: "",
          password: "",
@@ -47,7 +58,7 @@ export default function Login() {
          <div className="max-w-sm w-full mx-auto px-4 pt-24">
             <div className="text-center">
                <h1 className="text-3xl font-semibold text-zinc-50 mx-auto">
-                  Login
+                  Platform Access
                </h1>
                <p className="text-base pt-2 text-noir-300">
                   Welcome back to VEO.
@@ -66,6 +77,7 @@ export default function Login() {
                            required
                            value={value}
                            onChange={onChange}
+                           error={errors.email}
                         />
                      )}
                   />
@@ -80,22 +92,32 @@ export default function Login() {
                            required
                            value={value}
                            onChange={onChange}
+                           error={errors.password}
                         />
                      )}
                   />
                </div>
                <button
                   type="submit"
-                  // onClick={() => signIn()}
-                  className="text-base w-full px-2 py-2 rounded bg-zinc-50 text-neutral-900 flex justify-center items-center space-x-2"
+                  disabled={!isValid}
+                  className={cn(
+                     "transition-colors duration-125 text-base w-full px-2 py-2 border rounded flex justify-center items-center space-x-2",
+                     {
+                        "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
+                        "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
+                           !isValid,
+                     }
+                  )}
                >
-                  <span>Login</span>
+                  <span>Log in</span>
                </button>
                <div className="flex justify-center items-center pt-4 space-x-2">
                   <p className="text-noir-400">Don&apos;t have an account?</p>
-                  <Link href="/signup" passHref>
-                     <p className="cursor-pointer text-blue-500">Sign up</p>
-                  </Link>
+                  <p className="cursor-pointer text-blue-500">
+                     <Link href="/signup" passHref>
+                        Sign up
+                     </Link>
+                  </p>
                </div>
             </form>
          </div>

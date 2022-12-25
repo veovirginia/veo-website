@@ -2,15 +2,38 @@ import Link from "next/link"
 import Input from "../components/Input"
 import AuthLayout from "../components/layouts/AuthLayout"
 import { Controller, useForm } from "react-hook-form"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+import cn from "classnames"
 import axios from "axios"
+
+type Inputs = {
+   name: string
+   email: string
+   password: string
+}
+
+const schema = yup.object().shape({
+   email: yup.string().email("Invalid email").required("Email required"),
+   password: yup
+      .string()
+      .min(8, "Must be at least 8 characters")
+      .max(32, "Must not exceed 32 characters")
+      .matches(/(?=.*[a-z])/, "Must contain a lowercase letter")
+      .matches(/(?=.*[A-Z])/, "Must contain an uppercase letter")
+      .matches(/(?=.*[0-9])/, "Must contain a number")
+      .matches(/(?=.*[-+_!@#$%^&*., ?])/, "Must contain a special character")
+      .required("Password required"),
+})
 
 export default function Signup() {
    const {
       control,
       handleSubmit,
-      formState: { errors },
+      formState: { errors, isValid },
       reset,
-   } = useForm({
+   } = useForm<Inputs>({
+      resolver: yupResolver(schema),
       defaultValues: {
          name: "",
          email: "",
@@ -55,6 +78,7 @@ export default function Signup() {
                            required
                            value={value}
                            onChange={onChange}
+                           error={errors.name}
                         />
                      )}
                   />
@@ -69,6 +93,7 @@ export default function Signup() {
                            required
                            value={value}
                            onChange={onChange}
+                           error={errors.email}
                         />
                      )}
                   />
@@ -83,13 +108,22 @@ export default function Signup() {
                            required
                            value={value}
                            onChange={onChange}
+                           error={errors.password}
                         />
                      )}
                   />
                </div>
                <button
                   type="submit"
-                  className="w-full p-2 rounded bg-zinc-50 text-neutral-900 flex justify-center items-center space-x-2"
+                  disabled={!isValid}
+                  className={cn(
+                     "transition-colors duration-125 text-base w-full px-2 py-2 border rounded flex justify-center items-center space-x-2",
+                     {
+                        "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
+                        "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
+                           !isValid,
+                     }
+                  )}
                >
                   <span>Create account</span>
                </button>
