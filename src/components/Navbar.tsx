@@ -23,7 +23,7 @@ const Navbar = () => {
             ) : (
                <p className="flex items-center text-neutral-400 space-x-6">
                   <Link href="/login" passHref>
-                     <p className="cursor-pointer">Login</p>
+                     <span className="cursor-pointer">Login</span>
                   </Link>
                   <Link href="/signup" passHref>
                      <button
