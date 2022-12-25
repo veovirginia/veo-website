@@ -10,10 +10,7 @@ export default async function validateEmail(email: string) {
    let errors: string[] = []
    if (
       !email ||
-      !match(
-         email,
-         "(^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$)"
-      )
+      !match(email, "(^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@virginia.edu)")
    ) {
       errors.push("Email is invalid.")
    }

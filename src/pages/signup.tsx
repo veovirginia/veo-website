@@ -14,7 +14,11 @@ type Inputs = {
 }
 
 const schema = yup.object().shape({
-   email: yup.string().email("Invalid email").required("Email required"),
+   email: yup
+      .string()
+      .email("Invalid email")
+      .matches(/@virginia.edu/i, "Must be a UVA email")
+      .required("Email required"),
    password: yup
       .string()
       .min(8, "Must be at least 8 characters")
@@ -39,7 +43,7 @@ export default function Signup() {
          email: "",
          password: "",
       },
-      mode: "onBlur",
+      mode: "onChange",
    })
    const submitHandler = async (values: any) => {
       const { data } = await axios({
