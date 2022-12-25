@@ -37,11 +37,11 @@ model User {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   name            String // nextauth
   email           String    @unique
-  emailVerified   DateTime? // nextauth
+  emailVerified   Boolean   @default(false) // nextauth
   accountVerified Boolean   @default(false)
   password        String
   role            String    @default("user")
-  image           String? // nextauth
+  image           String?   @default("") // nextauth 
   accounts        Account[] // nextauth
   sessions        Session[] // nextauth
   createdAt       DateTime  @default(now())
