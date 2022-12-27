@@ -7,6 +7,8 @@ import {
    hash,
 } from "../../../helpers/auth"
 import { RegisterBody } from "../../../types/auth"
+import generateToken from "../../../helpers/auth/generateToken"
+import { sendEmail } from "../../../helpers/email"
 
 export default async function handler(
    req: NextApiRequest,
@@ -63,8 +65,28 @@ export default async function handler(
          },
       })
    } catch (error: any) {
-      throw error
+      return res.status(500).json({ error: "Unable to create account." })
    }
+
+   // Save JWT token for email verification
+   const token = generateToken(account.email)
+   try {
+      await prisma.emailVerification.create({
+         data: {
+            token: token,
+         },
+      })
+   } catch (error: any) {
+      throw new Error(error)
+   }
+
+   // Send verification email
+   await sendEmail(
+      { email: "noreply@veovirginia.com", name: "VEO Virginia" },
+      { email: account.email, name: account.name },
+      "Email Verification",
+      `<h3>Welcome to the Virginia Entrepreneurship Organization!</h3><br /><p>We're excited to have you join us, ${account.name}. Before you can continue, please verify your email by clicking on this link: <a href="https://veovirginia.com/verify/${token}" target="_blank">https://veovirginia.com/verify/${token}</a><br />Note: This link will expire in 7 days.</p>`
+   )
 
    // Return creation status
    return res.status(201).json({

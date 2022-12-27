@@ -56,3 +56,8 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model EmailVerification {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  token String @unique
+}
