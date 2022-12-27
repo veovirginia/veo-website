@@ -7,58 +7,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.String
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model User {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  name            String // nextauth
-  email           String    @unique
-  emailVerified   Boolean   @default(false) // nextauth
-  accountVerified Boolean   @default(false)
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  email           String   @unique
+  emailVerified   Boolean  @default(false)
+  accountVerified Boolean  @default(false)
   password        String
-  role            String    @default("user")
-  image           String?   @default("") // nextauth 
-  phoneNumber     String?   @default("")
-  graduation      String?   @default("")
-  major           String?   @default("")
-  idea            String?   @default("")
-  accounts        Account[] // nextauth
-  sessions        Session[] // nextauth
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-}
-
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  role            String   @default("user")
+  image           String?  @default("")
+  phoneNumber     String?  @default("")
+  graduation      String?  @default("")
+  major           String?  @default("")
+  idea            String?  @default("")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model EmailVerification {
