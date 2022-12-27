@@ -14,6 +14,7 @@ type Inputs = {
 }
 
 const schema = yup.object().shape({
+   name: yup.string().required("Name required"),
    email: yup
       .string()
       .email("Invalid email")
@@ -48,7 +49,7 @@ export default function Signup() {
    const submitHandler = async (values: any) => {
       const { data } = await axios({
          method: "post",
-         url: "/api/auth/register",
+         url: "/api/auth/signup",
          data: values,
       })
       console.log(data)

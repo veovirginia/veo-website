@@ -1,4 +1,4 @@
-import { signOut, getSession } from "next-auth/react"
+import { getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Navbar from "../Navbar"
 import { ReactNode } from "react"

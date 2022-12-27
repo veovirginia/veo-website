@@ -5,6 +5,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { verifyPassword } from "../../../helpers/auth"
 
 // Sign in
+const ONE_DAY_IN_SECONDS = 24 * 60 * 60
+const THIRTY_DAYS_IN_SECONDS = 30 * 24 * 60 * 60
 async function authorize(
    credentials: { email: string; password: string } | undefined
 ) {
@@ -66,7 +68,7 @@ export default NextAuth({
    },
    session: {
       strategy: "jwt",
-      maxAge: 30 * 24 * 60 * 60,
-      updateAge: 24 * 60 * 60,
+      maxAge: THIRTY_DAYS_IN_SECONDS,
+      updateAge: ONE_DAY_IN_SECONDS,
    },
 })
