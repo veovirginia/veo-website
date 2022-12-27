@@ -42,6 +42,10 @@ model User {
   password        String
   role            String    @default("user")
   image           String?   @default("") // nextauth 
+  phoneNumber     String?   @default("")
+  graduation      String?   @default("")
+  major           String?   @default("")
+  idea            String?   @default("")
   accounts        Account[] // nextauth
   sessions        Session[] // nextauth
   createdAt       DateTime  @default(now())
