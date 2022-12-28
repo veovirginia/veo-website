@@ -1,14 +1,16 @@
-import { signIn, getCsrfToken, getSession } from "next-auth/react"
-import { GetServerSidePropsContext } from "next"
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
-import cn from "classnames"
-import AuthLayout from "../components/layouts/AuthLayout"
+import Link from "next/link"
 import Input from "../components/Input"
+import AuthLayout from "../components/layouts/AuthLayout"
+import { Controller, useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
-import Link from "next/link"
+import cn from "classnames"
+import axios from "axios"
 import { useState } from "react"
+import { GetServerSidePropsContext } from "next"
 import Router from "next/router"
+import { getCsrfToken, getSession } from "next-auth/react"
+import { BiX } from "react-icons/bi"
 import Alert from "../components/Alert"
 
 type Inputs = {
@@ -18,6 +20,7 @@ type Inputs = {
 }
 
 const schema = yup.object().shape({
+   name: yup.string().required("Name required"),
    email: yup
       .string()
       .email("Invalid email")
@@ -27,12 +30,17 @@ const schema = yup.object().shape({
       .string()
       .min(8, "Must be at least 8 characters")
       .max(32, "Must not exceed 32 characters")
+      .matches(/(?=.*[a-z])/, "Must contain a lowercase letter")
+      .matches(/(?=.*[A-Z])/, "Must contain an uppercase letter")
+      .matches(/(?=.*[0-9])/, "Must contain a number")
+      .matches(/(?=.*[-+_!@#$%^&*., ?])/, "Must contain a special character")
       .required("Password required"),
 })
 
-export default function Login() {
+export default function Signup() {
    const [message, setMessage] = useState("")
    const [isVisible, setVisible] = useState(false)
+   // Todo: add notification for messages
    const {
       control,
       handleSubmit,
@@ -41,35 +49,42 @@ export default function Login() {
    } = useForm<Inputs>({
       resolver: yupResolver(schema),
       defaultValues: {
+         name: "",
          email: "",
          password: "",
       },
       mode: "onChange",
    })
    const submitHandler = async (values: Inputs) => {
-      const response = await signIn("credentials", {
-         redirect: false,
-         email: values.email,
-         password: values.password,
-      })
-
-      if (response?.error) {
-         setMessage("Unable to login. Please try again later.")
+      try {
+         const { data } = await axios({
+            method: "post",
+            url: "/api/auth/signup",
+            data: values,
+         })
+         if (data.success) {
+            Router.push("/login")
+         }
+      } catch (error: any) {
+         console.log(error.response)
+         setMessage("Unable to create account. Please try again later.")
          setVisible(true)
-      } else {
-         Router.push("/login")
       }
+      reset()
    }
-
    return (
       <AuthLayout>
-         <div className="max-w-sm w-full mx-auto px-4 pt-24">
+         <div className="max-w-sm w-full mx-auto pt-24 px-4">
             <div className="text-center pb-4">
-               <h1 className="text-3xl font-semibold text-zinc-50 mx-auto">
-                  Platform Access
+               <h1 className="text-3xl font-semibold text-white mx-auto">
+                  Welcome to
+                  {/* Animating gradient? */}
+                  <span className="ml-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
+                     VEO
+                  </span>
                </h1>
                <p className="text-base pt-2 text-noir-300">
-                  Welcome back to VEO.
+                  Join the premiere entrepreneurship community.
                </p>
             </div>
             {isVisible && message && (
@@ -80,7 +95,22 @@ export default function Login() {
                />
             )}
             <form className="w-full" onSubmit={handleSubmit(submitHandler)}>
-               <div className="w-full space-y-4 pt-4 pb-8">
+               <div className="pt-4 space-y-4 pb-8">
+                  <Controller
+                     name="name"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <Input
+                           label="Full Name"
+                           placeholder="John Doe"
+                           type="text"
+                           required
+                           value={value}
+                           onChange={onChange}
+                           error={errors.name}
+                        />
+                     )}
+                  />
                   <Controller
                      name="email"
                      control={control}
@@ -124,15 +154,13 @@ export default function Login() {
                      }
                   )}
                >
-                  <span>Log in</span>
+                  <span>Create account</span>
                </button>
                <div className="flex justify-center items-center pt-4 space-x-2">
-                  <p className="text-noir-400">Don&apos;t have an account?</p>
-                  <p className="cursor-pointer text-blue-500">
-                     <Link href="/signup" passHref>
-                        Sign up
-                     </Link>
-                  </p>
+                  <p className="text-noir-400">Already have an account?</p>
+                  <Link href="/login" passHref>
+                     <p className="cursor-pointer text-blue-500">Log in</p>
+                  </Link>
                </div>
             </form>
          </div>

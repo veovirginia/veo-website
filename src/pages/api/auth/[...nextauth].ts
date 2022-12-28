@@ -2,6 +2,43 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from "../../../../lib/prismadb"
 import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { verifyPassword } from "../../../helpers/auth"
+
+// Sign in
+const ONE_DAY_IN_SECONDS = 24 * 60 * 60
+const THIRTY_DAYS_IN_SECONDS = 30 * 24 * 60 * 60
+async function authorize(
+   credentials: { email: string; password: string } | undefined
+) {
+   if (!credentials) {
+      throw new Error("Credentials must be provided.")
+   }
+
+   const user = await prisma.user.findUnique({
+      where: {
+         email: credentials.email,
+      },
+   })
+
+   if (!user) {
+      throw new Error("User not found.")
+   }
+
+   const isValid = await verifyPassword(credentials.password, user.password)
+
+   if (!isValid) {
+      throw new Error("Password not found for user.")
+   }
+   return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      accountVerified: user.accountVerified,
+      emailVerified: user.emailVerified,
+      image: user.image,
+      role: user.role,
+   }
+}
 
 export default NextAuth({
    adapter: PrismaAdapter(prisma),
@@ -9,38 +46,29 @@ export default NextAuth({
       CredentialsProvider({
          name: "Credentials",
          credentials: {
-            username: {
-               label: "Username",
-               type: "text",
-               placeholder: "jsmith",
-            },
-            password: { label: "Password", type: "password" },
+            email: {},
+            password: {},
          },
-         async authorize(credentials, req) {
-            // You need to provide your own logic here that takes the credentials
-            // submitted and returns either a object representing a user or value
-            // that is false/null if the credentials are invalid.
-            // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-            // You can also use the `req` object to obtain additional parameters
-            // (i.e., the request IP address)
-            const res = await fetch("/your/endpoint", {
-               method: "POST",
-               body: JSON.stringify(credentials),
-               headers: { "Content-Type": "application/json" },
-            })
-            const user = await res.json()
-
-            // If no error and we have user data, return it
-            if (res.ok && user) {
-               return user
-            }
-            // Return null if user data could not be retrieved
-            return null
-         },
+         authorize,
       }),
    ],
    secret: process.env.NEXTAUTH_SECRET,
-   pages: {
-      signIn: "/login",
+   callbacks: {
+      async session({ session, token }: any) {
+         const { user } = token
+         session = { ...session, user }
+         return session
+      },
+      async jwt({ token, user }: any) {
+         if (user) {
+            token.user = user
+         }
+         return token
+      },
+   },
+   session: {
+      strategy: "jwt",
+      maxAge: THIRTY_DAYS_IN_SECONDS,
+      updateAge: ONE_DAY_IN_SECONDS,
    },
 })
