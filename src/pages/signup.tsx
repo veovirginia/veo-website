@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Input from "../components/Input"
-import AuthLayout from "../components/layouts/AuthLayout"
+import Layout from "../components/layouts/Layout"
 import { Controller, useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -48,14 +48,14 @@ export default function Signup() {
    const submitHandler = async (values: any) => {
       const { data } = await axios({
          method: "post",
-         url: "/api/auth/register",
+         url: "/api/auth/signup",
          data: values,
       })
       console.log(data)
       reset()
    }
    return (
-      <AuthLayout>
+      <Layout>
          <div className="max-w-sm w-full mx-auto pt-24 px-4">
             <div className="text-center">
                <h1 className="text-3xl font-semibold text-white mx-auto">
@@ -139,7 +139,7 @@ export default function Signup() {
                </div>
             </form>
          </div>
-      </AuthLayout>
+      </Layout>
    )
 }
 

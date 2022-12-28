@@ -1,4 +1,4 @@
-import { useSession, signOut, getSession } from "next-auth/react"
+import { signOut, getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Navbar from "../Navbar"
 import { ReactNode } from "react"
@@ -8,11 +8,9 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-   const { data: session } = useSession()
-
    return (
-      <div className="bg=background w-full min-h-screen relative">
-         <Navbar session={session} />
+      <div className="bg-noir-900 w-full min-h-screen">
+         <Navbar />
          {children}
       </div>
    )
