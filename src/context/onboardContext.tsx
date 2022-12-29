@@ -15,6 +15,7 @@ interface OnboardProviderProps {
 }
 
 export default function OnboardProvider({ children }: OnboardProviderProps) {
+   const [step, setStep] = useState<number>(1)
    const [formValues, setValues] = useState<OnboardContextForm>({
       info: {
          phone: "",
@@ -27,15 +28,18 @@ export default function OnboardProvider({ children }: OnboardProviderProps) {
          isScheduled: false,
       },
    })
-   function updateInfo(values: OnboardContextInfo) {
+   const updateStep = (page: number) => {
+      setStep(page)
+   }
+   const updateInfo = (values: OnboardContextInfo) => {
       setValues({ ...formValues, info: { ...values } })
    }
-   function updateMeeting(values: OnboardContextMeeting) {
+   const updateMeeting = (values: OnboardContextMeeting) => {
       setValues({ ...formValues, meeting: { ...values } })
    }
    return (
       <OnboardContext.Provider
-         value={{ formValues, updateInfo, updateMeeting }}
+         value={{ step, formValues, updateStep, updateInfo, updateMeeting }}
       >
          {children}
       </OnboardContext.Provider>

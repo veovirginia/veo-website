@@ -1,5 +1,7 @@
 export interface OnboardContextInterface {
+   step: number
    formValues: OnboardContextForm
+   updateStep: (page: number) => void
    updateInfo: (newInfo: OnboardContextInfo) => void
    updateMeeting: (newMeeting: OnboardContextMeeting) => void
 }

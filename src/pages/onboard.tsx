@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import cn from "classnames"
 import StepOne from "../components/onboard/StepOne"
 import StepTwo from "../components/onboard/StepTwo"
@@ -7,27 +7,34 @@ import StepThree from "../components/onboard/StepThree"
 import { getSession, useSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
-import OnboardProvider from "../context/onboardContext"
+import OnboardProvider, { OnboardContext } from "../context/onboardContext"
+
+function OnboardSteps() {
+   const [step, setStep] = useState(1)
+   const formContext = useContext(OnboardContext)
+
+   useEffect(() => {
+      if (formContext) {
+         const { step: ctxStep } = formContext
+         setStep(ctxStep)
+      }
+   }, [formContext])
+   return (
+      <div className="flex flex-1">
+         {step === 1 && <StepOne />}
+         {step === 2 && <StepTwo />}
+         {step === 3 && <StepThree />}
+      </div>
+   )
+}
 
 export default function Onboard() {
-   const { data: session } = useSession()
-   const [step, setStep] = useState(1)
-
    return (
       <Layout>
          <AnimatePresence>
             <OnboardProvider>
                <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
-                  <div className="flex flex-1">
-                     {step === 1 && <StepOne onNext={() => setStep(2)} />}
-                     {step === 2 && (
-                        <StepTwo
-                           onBack={() => setStep(1)}
-                           onNext={() => setStep(3)}
-                        />
-                     )}
-                     {step === 3 && <StepThree onBack={() => setStep(2)} />}
-                  </div>
+                  <OnboardSteps />
                </div>
             </OnboardProvider>
          </AnimatePresence>

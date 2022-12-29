@@ -1,13 +1,11 @@
 import StepHeader from "../StepHeader"
 import cn from "classnames"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Cal, { getCalApi } from "@calcom/embed-react"
+import { OnboardContext } from "../../context/onboardContext"
 
-interface StepThreeProps {
-   onBack: () => void
-}
-
-export default function StepThree({ onBack }: StepThreeProps) {
+export default function StepThree() {
+   const formContext = useContext(OnboardContext)
    const [isScheduled, setScheduled] = useState(false)
    useEffect(() => {
       ;(async function () {
@@ -23,7 +21,7 @@ export default function StepThree({ onBack }: StepThreeProps) {
             cal("on", {
                action: "bookingSuccessful",
                callback: (e: any) => {
-                  const { data, type, namespace } = e.detail
+                  const { data } = e.detail
                   if (data.confirmed === true) {
                      setScheduled(true)
                   }
@@ -32,6 +30,13 @@ export default function StepThree({ onBack }: StepThreeProps) {
          }
       })()
    }, [])
+
+   const backHandler = () => {
+      if (formContext) {
+         const { updateStep } = formContext
+         updateStep(2)
+      }
+   }
 
    return (
       <div className="flex flex-col w-full">
@@ -50,21 +55,21 @@ export default function StepThree({ onBack }: StepThreeProps) {
             <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-4">
                <button
                   type="button"
-                  onClick={() => onBack()}
-                  className="rounded border px-8 py-2 bg-transparent border-noir-800 text-noir-200"
+                  onClick={() => backHandler()}
+                  className="rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200"
                >
                   Back
                </button>
                <button
                   type="button"
                   onClick={() => console.log("done")}
-                  className={cn("rounded border px-16 py-2", {
+                  className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50": isScheduled,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
                         !isScheduled,
                   })}
                >
-                  Continue
+                  Finish
                </button>
             </div>
          </div>

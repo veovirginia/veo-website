@@ -22,24 +22,28 @@ const members = [
    },
 ]
 
-interface StepTwoProps {
-   onBack: () => void
-   onNext: () => void
-}
-
-export default function StepTwo({ onBack, onNext }: StepTwoProps) {
+export default function StepTwo() {
    const formContext = useContext(OnboardContext)
    const [selectedRow, setRow] = useState(
       formContext?.formValues.meeting.member[1]
    )
-   const nextHandler = () => {
-      if (selectedRow) {
-         formContext?.updateMeeting({
-            member: [members[selectedRow].name, selectedRow],
-            isScheduled: false,
-         })
+   const backHandler = () => {
+      if (formContext) {
+         const { updateStep } = formContext
+         updateStep(1)
       }
-      onNext()
+   }
+   const nextHandler = () => {
+      if (formContext) {
+         const { updateMeeting, updateStep } = formContext
+         if (selectedRow) {
+            updateMeeting({
+               member: [members[selectedRow].name, selectedRow],
+               isScheduled: false,
+            })
+         }
+         updateStep(3)
+      }
    }
    return (
       <div className="flex flex-col w-full max-w-2xl mx-auto">
@@ -67,15 +71,15 @@ export default function StepTwo({ onBack, onNext }: StepTwoProps) {
             <div className="flex justify-between items-center ">
                <button
                   type="button"
-                  onClick={() => onBack()}
-                  className="rounded border px-8 py-2 bg-transparent border-noir-800 text-noir-200"
+                  onClick={() => backHandler()}
+                  className="rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200"
                >
                   Back
                </button>
                <button
                   type="button"
                   onClick={() => nextHandler()}
-                  className={cn("rounded border px-16 py-2", {
+                  className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50":
                         selectedRow && selectedRow >= 0,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":

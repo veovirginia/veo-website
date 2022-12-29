@@ -34,11 +34,7 @@ const schema = yup.object().shape({
    idea: yup.string().max(32, "Must not exceed 32 characters"),
 })
 
-interface StepOneProps {
-   onNext: () => void
-}
-
-export default function StepOne({ onNext }: StepOneProps) {
+export default function StepOne() {
    const formContext = useContext(OnboardContext)
    const {
       control,
@@ -55,8 +51,11 @@ export default function StepOne({ onNext }: StepOneProps) {
       mode: "onChange",
    })
    const nextHandler = () => {
-      formContext?.updateInfo(getValues())
-      onNext()
+      if (formContext) {
+         const { updateInfo, updateStep } = formContext
+         updateInfo(getValues())
+         updateStep(2)
+      }
    }
    return (
       <div className="flex flex-col w-full max-w-2xl mx-auto">
@@ -131,7 +130,7 @@ export default function StepOne({ onNext }: StepOneProps) {
                <button
                   type="button"
                   onClick={() => nextHandler()}
-                  className={cn("rounded border px-16 py-2", {
+                  className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
                         !isValid,
