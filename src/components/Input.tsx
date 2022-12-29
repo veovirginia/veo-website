@@ -23,8 +23,6 @@ export default function Input({
    error,
    onChange,
 }: InputProps) {
-   const [val, setVal] = useState(value)
-
    return (
       <div className="text-left">
          <p className="text-sm text-noir-300 font-regular pb-2">{label}</p>
@@ -37,13 +35,12 @@ export default function Input({
             )}
             placeholder={placeholder}
             type={type}
-            value={val}
+            value={value}
             required={required}
             disabled={disabled}
             onChange={(event: any) => {
                const target = event.target as HTMLInputElement
                if (target) {
-                  setVal(target.value)
                   onChange(event.target?.value)
                }
             }}
