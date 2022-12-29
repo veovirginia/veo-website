@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { OnboardProvider } from "../components/context/onboard"
 import cn from "classnames"
 import StepOne from "../components/onboard/StepOne"
 import StepTwo from "../components/onboard/StepTwo"
@@ -8,6 +7,7 @@ import StepThree from "../components/onboard/StepThree"
 import { getSession, useSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
+import OnboardProvider from "../context/onboardContext"
 
 export default function Onboard() {
    const { data: session } = useSession()
@@ -15,39 +15,22 @@ export default function Onboard() {
 
    return (
       <Layout>
-         <OnboardProvider>
-            <div className="pt-20 max-w-2xl mx-auto min-h-[40rem] flex flex-col justify-between">
-               <AnimatePresence>
-                  <div>
-                     {step === 1 && <StepOne />}
-                     {step === 2 && <StepTwo />}
-                     {step === 3 && <StepThree />}
+         <AnimatePresence>
+            <OnboardProvider>
+               <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
+                  <div className="flex flex-1">
+                     {step === 1 && <StepOne onNext={() => setStep(2)} />}
+                     {step === 2 && (
+                        <StepTwo
+                           onBack={() => setStep(1)}
+                           onNext={() => setStep(3)}
+                        />
+                     )}
+                     {step === 3 && <StepThree onBack={() => setStep(2)} />}
                   </div>
-                  <div
-                     className={cn("flex w-full", {
-                        "justify-center": step == 1,
-                        "justify-between": step >= 2,
-                     })}
-                  >
-                     <button
-                        onClick={() => setStep(step - 1)}
-                        className={cn("rounded bg-white text-black px-6 py-2", {
-                           hidden: step === 1,
-                           block: step >= 2,
-                        })}
-                     >
-                        Go back
-                     </button>
-                     <button
-                        onClick={() => step < 3 && setStep(step + 1)}
-                        className="rounded bg-white text-black px-16 py-2"
-                     >
-                        {step < 3 ? "Continue" : "Finish"}
-                     </button>
-                  </div>
-               </AnimatePresence>
-            </div>
-         </OnboardProvider>
+               </div>
+            </OnboardProvider>
+         </AnimatePresence>
       </Layout>
    )
 }
