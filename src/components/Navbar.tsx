@@ -15,7 +15,6 @@ const Navbar = () => {
             </h1>
          </div>
          <div className="flex items-center space-x-8 text-sm">
-            <button onClick={() => console.log(session)}>session</button>
             {session?.user ? (
                <button onClick={() => signOut()} className="text-white">
                   Log out
