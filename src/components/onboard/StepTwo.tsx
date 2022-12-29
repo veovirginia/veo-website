@@ -38,7 +38,7 @@ export default function StepTwo() {
          const { updateMeeting, updateStep } = formContext
          if (selectedRow) {
             updateMeeting({
-               member: [members[selectedRow].name, selectedRow],
+               member: [members[selectedRow - 1].name, selectedRow - 1],
                isScheduled: false,
             })
          }
@@ -55,6 +55,7 @@ export default function StepTwo() {
          <div className="flex flex-col h-full px-4">
             <div className="my-8 space-y-2 max-h-[24rem] overflow-auto">
                {members.map(({ name, major, grad }, idx) => {
+                  idx += 1
                   return (
                      <MemberRow
                         index={idx}
@@ -81,9 +82,9 @@ export default function StepTwo() {
                   onClick={() => nextHandler()}
                   className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50":
-                        selectedRow && selectedRow >= 0,
+                        selectedRow && selectedRow > 0,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                        selectedRow && selectedRow < 0,
+                        selectedRow && selectedRow <= 0,
                   })}
                >
                   Continue

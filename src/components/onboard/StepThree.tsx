@@ -3,10 +3,15 @@ import cn from "classnames"
 import { useContext, useEffect, useState } from "react"
 import Cal, { getCalApi } from "@calcom/embed-react"
 import { OnboardContext } from "../../context/onboardContext"
+import axios from "axios"
+import Alert from "../Alert"
+import Router from "next/router"
 
 export default function StepThree() {
    const formContext = useContext(OnboardContext)
-   const [isScheduled, setScheduled] = useState(false)
+   const [isScheduled, setScheduled] = useState(true)
+   const [isVisible, setVisible] = useState(true)
+   const [message, setMessage] = useState("")
    useEffect(() => {
       ;(async function () {
          const cal = await getCalApi()
@@ -38,6 +43,23 @@ export default function StepThree() {
       }
    }
 
+   const submitHandler = async () => {
+      try {
+         const { data } = await axios("/api/user/updateinfo", {
+            method: "post",
+            data: formContext?.formValues,
+         })
+         if (data.success) {
+            Router.push("/pending")
+         }
+      } catch (error: any) {
+         setMessage(
+            "Unable to update user information. Please try again later."
+         )
+         setVisible(true)
+      }
+   }
+
    return (
       <div className="flex flex-col w-full">
          <StepHeader
@@ -46,6 +68,15 @@ export default function StepThree() {
             description="Let us know when you want to meet."
          />
          <div className="flex flex-col h-full px-4">
+            {isVisible && message && (
+               <div className="max-w-2xl mx-auto pt-4">
+                  <Alert
+                     message={message}
+                     variant="alert"
+                     onClose={() => setVisible(!isVisible)}
+                  />
+               </div>
+            )}
             <div className="my-8">
                <Cal
                   calLink="entrepreneurship/onboard"
@@ -62,7 +93,7 @@ export default function StepThree() {
                </button>
                <button
                   type="button"
-                  onClick={() => console.log("done")}
+                  onClick={() => submitHandler()}
                   className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50": isScheduled,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
