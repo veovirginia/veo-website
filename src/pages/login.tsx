@@ -7,6 +7,9 @@ import Input from "../components/Input"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import Link from "next/link"
+import { useState } from "react"
+import Router from "next/router"
+import Alert from "../components/Alert"
 
 type Inputs = {
    name: string
@@ -28,6 +31,8 @@ const schema = yup.object().shape({
 })
 
 export default function Login() {
+   const [message, setMessage] = useState("")
+   const [isVisible, setVisible] = useState(false)
    const {
       control,
       handleSubmit,
@@ -41,26 +46,25 @@ export default function Login() {
       },
       mode: "onChange",
    })
-   const submitHandler = async (values: any) => {
-      const result = await signIn("credentials", {
+   const submitHandler = async (values: Inputs) => {
+      const response = await signIn("credentials", {
          redirect: false,
          email: values.email,
          password: values.password,
       })
 
-      if (!result?.error) {
-         console.log("success")
+      if (response?.error) {
+         setMessage("Unable to login. Please try again later.")
+         setVisible(true)
       } else {
-         console.log("unsuccessful login")
+         Router.push("/login")
       }
-
-      console.log(result)
    }
 
    return (
       <AuthLayout>
          <div className="max-w-sm w-full mx-auto px-4 pt-24">
-            <div className="text-center">
+            <div className="text-center pb-4">
                <h1 className="text-3xl font-semibold text-zinc-50 mx-auto">
                   Platform Access
                </h1>
@@ -68,8 +72,15 @@ export default function Login() {
                   Welcome back to VEO.
                </p>
             </div>
+            {isVisible && message && (
+               <Alert
+                  message={message}
+                  variant="alert"
+                  onClose={() => setVisible(!isVisible)}
+               />
+            )}
             <form className="w-full" onSubmit={handleSubmit(submitHandler)}>
-               <div className="w-full space-y-4 pt-10 pb-8">
+               <div className="w-full space-y-4 pt-4 pb-8">
                   <Controller
                      name="email"
                      control={control}

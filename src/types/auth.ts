@@ -1,10 +1,10 @@
-export type RegisterBody = {
+export interface RegisterBody {
    name: string
    email: string
    password: string
 }
 
-export type LoginBody = {
+export interface LoginBody {
    email: string
    password: string
 }

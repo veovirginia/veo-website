@@ -6,6 +6,12 @@ import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import cn from "classnames"
 import axios from "axios"
+import { useState } from "react"
+import { GetServerSidePropsContext } from "next"
+import Router from "next/router"
+import { getCsrfToken, getSession } from "next-auth/react"
+import { BiX } from "react-icons/bi"
+import Alert from "../components/Alert"
 
 type Inputs = {
    name: string
@@ -14,6 +20,7 @@ type Inputs = {
 }
 
 const schema = yup.object().shape({
+   name: yup.string().required("Name required"),
    email: yup
       .string()
       .email("Invalid email")
@@ -31,6 +38,9 @@ const schema = yup.object().shape({
 })
 
 export default function Signup() {
+   const [message, setMessage] = useState("")
+   const [isVisible, setVisible] = useState(false)
+   // Todo: add notification for messages
    const {
       control,
       handleSubmit,
@@ -45,19 +55,27 @@ export default function Signup() {
       },
       mode: "onChange",
    })
-   const submitHandler = async (values: any) => {
-      const { data } = await axios({
-         method: "post",
-         url: "/api/auth/signup",
-         data: values,
-      })
-      console.log(data)
+   const submitHandler = async (values: Inputs) => {
+      try {
+         const { data } = await axios({
+            method: "post",
+            url: "/api/auth/signup",
+            data: values,
+         })
+         if (data.success) {
+            Router.push("/login")
+         }
+      } catch (error: any) {
+         console.log(error.response)
+         setMessage("Unable to create account. Please try again later.")
+         setVisible(true)
+      }
       reset()
    }
    return (
       <Layout>
          <div className="max-w-sm w-full mx-auto pt-24 px-4">
-            <div className="text-center">
+            <div className="text-center pb-4">
                <h1 className="text-3xl font-semibold text-white mx-auto">
                   Welcome to
                   {/* Animating gradient? */}
@@ -69,8 +87,15 @@ export default function Signup() {
                   Join the premiere entrepreneurship community.
                </p>
             </div>
+            {isVisible && message && (
+               <Alert
+                  message={message}
+                  variant="alert"
+                  onClose={() => setVisible(!isVisible)}
+               />
+            )}
             <form className="w-full" onSubmit={handleSubmit(submitHandler)}>
-               <div className="pt-10 space-y-4 pb-8">
+               <div className="pt-4 space-y-4 pb-8">
                   <Controller
                      name="name"
                      control={control}
@@ -143,21 +168,21 @@ export default function Signup() {
    )
 }
 
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//    const { req } = context
-//    const session = await getSession({ req })
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+   const { req } = context
+   const session = await getSession({ req })
 
-//    if (session) {
-//       return {
-//          redirect: {
-//             destination: "/onboard",
-//          },
-//       }
-//    }
+   if (session) {
+      return {
+         redirect: {
+            destination: "/onboard",
+         },
+      }
+   }
 
-//    return {
-//       props: {
-//          csrfToken: await getCsrfToken(context),
-//       },
-//    }
-// }
+   return {
+      props: {
+         csrfToken: await getCsrfToken(context),
+      },
+   }
+}
