@@ -48,7 +48,8 @@ export default function Login() {
    })
    const submitHandler = async (values: Inputs) => {
       const response = await signIn("credentials", {
-         redirect: false,
+         redirect: true,
+         callbackUrl: "/platform",
          email: values.email,
          password: values.password,
       })
@@ -56,8 +57,6 @@ export default function Login() {
       if (response?.error) {
          setMessage("Unable to login. Please try again later.")
          setVisible(true)
-      } else {
-         Router.push("/login")
       }
    }
 

@@ -81,12 +81,12 @@ export default async function handler(
    }
 
    // Send verification email
-   await sendEmail(
-      { email: "noreply@veovirginia.com", name: "VEO Virginia" },
-      { email: account.email, name: account.name },
-      "Email Verification",
-      `<h3>Welcome to the Virginia Entrepreneurship Organization!</h3><br /><p>We're excited to have you join us, ${account.name}. Before you can continue, please verify your email by clicking on this link: <a href="https://veovirginia.com/verify/${token}" target="_blank">https://veovirginia.com/verify/${token}</a><br />Note: This link will expire in 7 days.</p>`
-   )
+   // await sendEmail(
+   //    { email: "noreply@veovirginia.com", name: "VEO Virginia" },
+   //    { email: account.email, name: account.name },
+   //    "Email Verification",
+   //    `<h3>Welcome to the Virginia Entrepreneurship Organization!</h3><br /><p>We're excited to have you join us, ${account.name}. Before you can continue, please verify your email by clicking on this link: <a href="https://veovirginia.com/verify/${token}" target="_blank">https://veovirginia.com/verify/${token}</a><br />Note: This link will expire in 7 days.</p>`
+   // )
 
    // Return creation status
    return res.status(201).json({
