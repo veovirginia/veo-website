@@ -1,43 +1,77 @@
 import StepHeader from "../StepHeader"
-import { motion } from "framer-motion"
-import { useState } from "react"
-// import { InlineWidget, useCalendlyEventListener } from "react-calendly"
-
-const members = [
-   {
-      name: "Alex Becker",
-      major: "Computer Science + Commerce",
-      grad: "2023",
-   },
-   {
-      name: "Jason He",
-      major: "Computer Science + Commerce",
-      grad: "2024",
-   },
-   {
-      name: "David Xiang",
-      major: "Computer Science + Statistics",
-      grad: "2024",
-   },
-]
+import cn from "classnames"
+import { useContext, useEffect, useState } from "react"
+import Cal, { getCalApi } from "@calcom/embed-react"
+import { OnboardContext } from "../../context/onboardContext"
 
 export default function StepThree() {
-   // useCalendlyEventListener({
-   //    onProfilePageViewed: () => console.log("onProfilePageViewed"),
-   //    onDateAndTimeSelected: () => console.log("onDateAndTimeSelected"),
-   //    onEventTypeViewed: () => console.log("onEventTypeViewed"),
-   //    onEventScheduled: (e) => console.log(e.data.payload),
-   // })
+   const formContext = useContext(OnboardContext)
+   const [isScheduled, setScheduled] = useState(false)
+   useEffect(() => {
+      ;(async function () {
+         const cal = await getCalApi()
+         //@ts-ignore:next-line
+         cal("ui", {
+            theme: "dark",
+            styles: { branding: { brandColor: "#030303" } },
+            hideEventTypeDetails: false,
+         })
+         if (cal) {
+            console.log("cal not undefined")
+            cal("on", {
+               action: "bookingSuccessful",
+               callback: (e: any) => {
+                  const { data } = e.detail
+                  if (data.confirmed === true) {
+                     setScheduled(true)
+                  }
+               },
+            })
+         }
+      })()
+   }, [])
+
+   const backHandler = () => {
+      if (formContext) {
+         const { updateStep } = formContext
+         updateStep(2)
+      }
+   }
 
    return (
-      <div>
+      <div className="flex flex-col w-full">
          <StepHeader
             step="3/3"
             title="Schedule a time and day"
             description="Let us know when you want to meet."
          />
-         <div className="space-y-2 py-6">
-            {/* <InlineWidget url="https://calendly.com/veovirginia/20min" /> */}
+         <div className="flex flex-col h-full px-4">
+            <div className="my-8">
+               <Cal
+                  calLink="entrepreneurship/onboard"
+                  style={{ width: "100%", height: "100%", overflow: "auto" }}
+               />
+            </div>
+            <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-4">
+               <button
+                  type="button"
+                  onClick={() => backHandler()}
+                  className="rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200"
+               >
+                  Back
+               </button>
+               <button
+                  type="button"
+                  onClick={() => console.log("done")}
+                  className={cn("rounded border px-8 py-2", {
+                     "bg-zinc-50 text-neutral-900 border-zinc-50": isScheduled,
+                     "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
+                        !isScheduled,
+                  })}
+               >
+                  Finish
+               </button>
+            </div>
          </div>
       </div>
    )

@@ -8,7 +8,7 @@ interface MemberRowProps {
    major: string
    grad: string
    onclick: (idx: number) => void
-   selected: number
+   selected: number | undefined
 }
 
 export default function MemberRow({
@@ -23,7 +23,7 @@ export default function MemberRow({
       <button
          onClick={() => onclick(index)}
          className={cn(
-            "relative p-3 py-2 flex w-full items-center justify-between hover:bg-neutral-800/30 transition-colors ease-in duration-100 border-neutral-700/50 border rounded"
+            "relative p-3 py-2 flex w-full items-center justify-between hover:bg-noir-800/20 transition-colors ease-in duration-100 border-noir-700/50 border rounded"
          )}
       >
          {selected === index && (
@@ -40,8 +40,8 @@ export default function MemberRow({
          <div className="text-left flex gap-3 items-center">
             <div className="rounded-full overflow-none w-10 h-10 bg-blue-500" />
             <div className="">
-               <p className="text-neutral-200 font-medium text-base">{name}</p>
-               <p className="text-sm text-neutral-400">
+               <p className="text-zinc-100 text-base">{name}</p>
+               <p className="text-sm text-noir-400">
                   {major} • Class of {grad}
                </p>
             </div>
