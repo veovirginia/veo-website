@@ -21,15 +21,12 @@ const Navbar = () => {
                </button>
             ) : (
                <p className="flex items-center text-neutral-400 space-x-6">
-                  <Link href="/login" passHref>
-                     <span className="cursor-pointer">Login</span>
-                  </Link>
-                  <Link href="/signup" passHref>
+                  <Link href="/access" passHref>
                      <button
                         type="button"
                         className="text-zinc-50 px-4 py-2 rounded bg-transparent border-neutral-700 hover:border-zinc-50 hover:bg-zinc-50 hover:text-neutral-900 transition-colors duration-125 border"
                      >
-                        Signup
+                        Platform Access
                      </button>
                   </Link>
                </p>

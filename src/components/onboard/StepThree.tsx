@@ -9,7 +9,7 @@ import Router from "next/router"
 
 export default function StepThree() {
    const formContext = useContext(OnboardContext)
-   const [isScheduled, setScheduled] = useState(true)
+   const [isScheduled, setScheduled] = useState(false)
    const [isVisible, setVisible] = useState(true)
    const [message, setMessage] = useState("")
    useEffect(() => {
@@ -45,8 +45,8 @@ export default function StepThree() {
 
    const submitHandler = async () => {
       try {
-         const { data } = await axios("/api/user/updateinfo", {
-            method: "post",
+         const { data } = await axios("/api/user", {
+            method: "put",
             data: formContext?.formValues,
          })
          if (data.success) {
@@ -93,6 +93,7 @@ export default function StepThree() {
                </button>
                <button
                   type="button"
+                  disabled={!isScheduled}
                   onClick={() => submitHandler()}
                   className={cn("rounded border px-8 py-2", {
                      "bg-zinc-50 text-neutral-900 border-zinc-50": isScheduled,

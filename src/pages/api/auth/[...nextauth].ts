@@ -1,77 +1,80 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from "../../../../lib/prismadb"
 import NextAuth from "next-auth/next"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { verifyPassword } from "../../../helpers/auth"
+import Email from "next-auth/providers/email"
+import { NextAuthOptions } from "next-auth"
+import { AdapterUser } from "next-auth/adapters"
+import { NextApiRequest, NextApiResponse } from "next"
 
-// Sign in
-const ONE_DAY_IN_SECONDS = 86400
-const SEVEN_DAYS_IN_SECONDS = 604800
-async function authorize(
-   credentials: { email: string; password: string } | undefined
-) {
-   if (!credentials) {
-      throw new Error("Credentials must be provided.")
-   }
+export const ONE_DAY = 86400
+export const SEVEN_DAYS = 604800
 
-   const user = await prisma.user.findUnique({
-      where: {
-         email: credentials.email,
+const EmailProvider = Email({
+   id: "email",
+   name: "email",
+   server: {
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      auth: {
+         user: process.env.EMAIL_USER,
+         pass: process.env.EMAIL_PASSWORD,
       },
-   })
+   },
+   from: process.env.EMAIL_FROM,
+})
 
-   if (!user) {
-      throw new Error("User not found.")
-   }
+const session = async ({ session, token }: any) => {
+   // TODO: type this
+   const { user } = token
 
-   const isValid = await verifyPassword(credentials.password, user.password)
-
-   if (!isValid) {
-      throw new Error("Password not found for user.")
-   }
    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      accountVerified: user.accountVerified,
-      emailVerified: user.emailVerified,
-      image: user.image,
-      role: user.role,
+      ...session,
+      user,
    }
 }
 
-export default NextAuth({
+const jwtCallback = async ({ token, user }: any) =>
+   user ? { ...token, user } : token
+
+const signIn = async ({ user }: any) => {
+   const { email } = user as AdapterUser
+
+   const dbUser = await prisma.user.upsert({
+      where: {
+         email,
+      },
+      update: {},
+      create: {
+         email: "dsoa@virginia.edu",
+         name: "",
+      },
+   })
+
+   return !!dbUser
+}
+
+export const authOptions = (): NextAuthOptions => ({
    adapter: PrismaAdapter(prisma),
-   providers: [
-      CredentialsProvider({
-         name: "Credentials",
-         credentials: {
-            email: {},
-            password: {},
-         },
-         authorize,
-      }),
-   ],
+   providers: [EmailProvider],
+   pages: {
+      signIn: "/access",
+      // signOut: "/signout",
+      // error: "/auth/error", // error code passed in query string as ?error=
+      newUser: "/onboard", // new users will be directed here on first sign in (leave the property out if not of interest)
+   },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
-      async session({ session, token }: any) {
-         const { user } = token
-         session = {
-            ...session,
-            user,
-         }
-         return session
-      },
-      async jwt({ token, user }: any) {
-         if (user) {
-            token.user = user
-         }
-         return token
-      },
+      session,
+      jwt: jwtCallback,
+      signIn,
    },
    session: {
       strategy: "jwt",
-      maxAge: SEVEN_DAYS_IN_SECONDS,
-      updateAge: ONE_DAY_IN_SECONDS,
+      maxAge: ONE_DAY,
+      updateAge: SEVEN_DAYS,
    },
 })
+
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+   return NextAuth(req, res, authOptions())
+}
