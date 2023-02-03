@@ -1,16 +1,18 @@
 import { useContext, useEffect, useState } from "react"
-import cn from "classnames"
+import { prisma } from "../helpers/db/index"
 import StepOne from "../components/onboard/StepOne"
 import StepTwo from "../components/onboard/StepTwo"
 import { AnimatePresence } from "framer-motion"
 import StepThree from "../components/onboard/StepThree"
-import { getSession, useSession } from "next-auth/react"
+import { getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
-import OnboardProvider, { OnboardContext } from "../context/onboardContext"
+import { OnboardContext } from "../context/onboardContext"
+import { OnboardContextInfo } from "../types/onboard"
 
 function OnboardSteps() {
    const [step, setStep] = useState(1)
+
    const formContext = useContext(OnboardContext)
 
    useEffect(() => {
@@ -28,15 +30,26 @@ function OnboardSteps() {
    )
 }
 
-export default function Onboard() {
+interface OnboardPageProps {
+   data: OnboardContextInfo
+}
+
+export default function Onboard({ data }: OnboardPageProps) {
+   const formContext = useContext(OnboardContext)
+
+   useEffect(() => {
+      if (formContext) {
+         const { updateInfo } = formContext
+         updateInfo(data)
+      }
+   }, [])
+
    return (
       <Layout>
          <AnimatePresence>
-            <OnboardProvider>
-               <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
-                  <OnboardSteps />
-               </div>
-            </OnboardProvider>
+            <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
+               <OnboardSteps />
+            </div>
          </AnimatePresence>
       </Layout>
    )
@@ -53,7 +66,32 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
          },
       }
    }
-   return {
-      props: {},
+   try {
+      const res = await prisma.user.findUnique({
+         where: {
+            email: session.user.email,
+         },
+      })
+      if (!res) {
+         return {
+            props: {},
+         }
+      }
+      return {
+         props: {
+            data: {
+               phone: res.phoneNumber,
+               graduation: res.graduation,
+               major: res.major,
+               idea: res.idea,
+            },
+         },
+      }
+   } catch (error: any) {
+      return {
+         props: {
+            error: "Unable to retrieve user information.",
+         },
+      }
    }
 }

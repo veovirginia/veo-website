@@ -30,8 +30,6 @@ export default function PatternInput({
    error,
    onValueChange,
 }: PatternInputProps) {
-   const [val, setVal] = useState(value)
-
    return (
       <div className="text-left">
          <p className="text-sm text-noir-300 font-regular pb-2">{label}</p>
@@ -47,13 +45,12 @@ export default function PatternInput({
             allowEmptyFormatting={allowEmptyFormatting}
             mask={mask}
             placeholder={placeholder}
-            value={val}
+            value={value}
             required={required}
             disabled={disabled}
             onChange={(event: any) => {
                const target = event.target as HTMLInputElement
                if (target) {
-                  setVal(target.value)
                   onValueChange(event.target?.value)
                }
             }}

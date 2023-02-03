@@ -10,10 +10,13 @@ interface AlertProps {
 export default function Alert({ message, variant, onClose }: AlertProps) {
    return (
       <div
-         className={cn("flex justify-between items-start p-2 text-sm border", {
-            "border-vesuvius-900 bg-vesuvius-900/30 rounded text-vesuvius-600":
-               variant === "alert",
-         })}
+         className={cn(
+            "flex justify-between items-start p-2 text-sm border space-x-4",
+            {
+               "border-vesuvius-900 bg-vesuvius-900/30 rounded text-vesuvius-600":
+                  variant === "alert",
+            }
+         )}
       >
          <p>{message}</p>
          <button type="button" onClick={() => onClose()} className="">

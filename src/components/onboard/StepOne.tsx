@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import cn from "classnames"
 import Input from "../Input"
 import StepHeader from "../StepHeader"
@@ -19,7 +19,6 @@ interface Inputs {
 const schema = yup.object().shape({
    phone: yup
       .string()
-      // @ts-ignore:next-line
       .phone("US", true, "Must be a valid US phone number")
       .required("Phone number required"),
    graduation: yup
@@ -35,10 +34,13 @@ const schema = yup.object().shape({
 })
 
 export default function StepOne() {
+   const [isLoading, setLoading] = useState(true)
    const formContext = useContext(OnboardContext)
    const {
       control,
       getValues,
+      setValue,
+      reset,
       formState: { errors, isValid },
    } = useForm<Inputs>({
       resolver: yupResolver(schema),
@@ -48,6 +50,7 @@ export default function StepOne() {
          major: formContext?.formValues.info.major,
          idea: formContext?.formValues.info.idea,
       },
+      shouldUnregister: false,
       mode: "onChange",
    })
    const nextHandler = () => {
@@ -57,6 +60,16 @@ export default function StepOne() {
          updateStep(2)
       }
    }
+   useEffect(() => {
+      if (formContext) {
+         const { phone, graduation, major, idea } = formContext.formValues.info
+         setValue("phone", phone)
+         setValue("graduation", graduation)
+         setValue("major", major)
+         setValue("idea", idea)
+         setLoading(false)
+      }
+   }, [formContext])
    return (
       <div className="flex flex-col w-full max-w-2xl mx-auto">
          <StepHeader
@@ -64,82 +77,88 @@ export default function StepOne() {
             title="Tell us about yourself"
             description="Help us get to know you better."
          />
-         <form className="flex flex-col justify-between h-full px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
-               <Controller
-                  name="phone"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                     <PatternInput
-                        label="Phone"
-                        placeholder="(###) ### ####"
-                        format="(###) ### ####"
-                        required
-                        value={value}
-                        onValueChange={onChange}
-                        error={errors.phone}
-                     />
-                  )}
-               />
-               <Controller
-                  name="graduation"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                     <PatternInput
-                        label="Expected Graduation"
-                        placeholder="MM/YY"
-                        format="##/##"
-                        required
-                        value={value}
-                        onValueChange={onChange}
-                        error={errors.graduation}
-                     />
-                  )}
-               />
-               <Controller
-                  name="major"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                     <Input
-                        label="Major"
-                        placeholder="Computer Science"
-                        type="text"
-                        required
-                        value={value}
-                        onChange={onChange}
-                        error={errors.major}
-                     />
-                  )}
-               />
-               <Controller
-                  name="idea"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                     <Input
-                        label="Idea"
-                        placeholder="The next big thing..."
-                        type="text"
-                        value={value}
-                        onChange={onChange}
-                        error={errors.idea}
-                     />
-                  )}
-               />
+         {isLoading ? (
+            <div className="flex justify-center text-noir-300 pt-12">
+               Loading user information...
             </div>
-            <div className="flex justify-center">
-               <button
-                  type="button"
-                  onClick={() => nextHandler()}
-                  className={cn("rounded border px-8 py-2", {
-                     "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
-                     "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                        !isValid,
-                  })}
-               >
-                  Continue
-               </button>
-            </div>
-         </form>
+         ) : (
+            <form className="flex flex-col justify-between h-full px-4">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+                  <Controller
+                     name="phone"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <PatternInput
+                           label="Phone"
+                           placeholder="(###) ### ####"
+                           format="(###) ### ####"
+                           required
+                           value={value}
+                           onValueChange={onChange}
+                           error={errors.phone}
+                        />
+                     )}
+                  />
+                  <Controller
+                     name="graduation"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <PatternInput
+                           label="Expected Graduation"
+                           placeholder="MM/YY"
+                           format="##/##"
+                           required
+                           value={value}
+                           onValueChange={onChange}
+                           error={errors.graduation}
+                        />
+                     )}
+                  />
+                  <Controller
+                     name="major"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <Input
+                           label="Major"
+                           placeholder="Computer Science"
+                           type="text"
+                           required
+                           value={value}
+                           onChange={onChange}
+                           error={errors.major}
+                        />
+                     )}
+                  />
+                  <Controller
+                     name="idea"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <Input
+                           label="Idea"
+                           placeholder="The next big thing..."
+                           type="text"
+                           value={value}
+                           onChange={onChange}
+                           error={errors.idea}
+                        />
+                     )}
+                  />
+               </div>
+               <div className="flex justify-center">
+                  <button
+                     type="button"
+                     onClick={() => nextHandler()}
+                     className={cn("rounded border px-8 py-2", {
+                        "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
+                        "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
+                           !isValid,
+                     })}
+                  >
+                     Continue
+                  </button>
+               </div>
+            </form>
+         )}
       </div>
    )
 }

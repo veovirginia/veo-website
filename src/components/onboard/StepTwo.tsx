@@ -38,7 +38,7 @@ export default function StepTwo() {
          const { updateMeeting, updateStep } = formContext
          if (selectedRow) {
             updateMeeting({
-               member: [members[selectedRow].name, selectedRow],
+               member: [members[selectedRow - 1].name, selectedRow - 1],
                isScheduled: false,
             })
          }
@@ -81,9 +81,10 @@ export default function StepTwo() {
                   type="button"
                   onClick={() => nextHandler()}
                   className={cn("rounded border px-8 py-2", {
-                     "bg-zinc-50 text-neutral-900 border-zinc-50": selectedRow,
+                     "bg-zinc-50 text-neutral-900 border-zinc-50":
+                        selectedRow && selectedRow > 0,
                      "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                        !selectedRow,
+                        selectedRow && selectedRow <= 0,
                   })}
                >
                   Continue
