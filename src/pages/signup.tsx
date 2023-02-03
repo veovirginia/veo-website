@@ -8,8 +8,7 @@ import cn from "classnames"
 import axios from "axios"
 import { useState } from "react"
 import { GetServerSidePropsContext } from "next"
-import Router from "next/router"
-import { getCsrfToken, getSession } from "next-auth/react"
+import { getCsrfToken, getSession, signIn } from "next-auth/react"
 import { BiX } from "react-icons/bi"
 import Alert from "../components/Alert"
 
@@ -63,11 +62,21 @@ export default function Signup() {
             data: values,
          })
          if (data.success) {
-            Router.push("/login")
+            const { email, password } = values
+            signIn("credentials", {
+               email,
+               password,
+               redirect: true,
+               callbackUrl: "/platform",
+            })
          }
       } catch (error: any) {
-         console.log(error.response)
-         setMessage("Unable to create account. Please try again later.")
+         if (error.response.data.email) {
+            setMessage(error.response.data.email[0])
+         } else {
+            setMessage("Unable to create account. Please try again later.")
+         }
+
          setVisible(true)
       }
       reset()
