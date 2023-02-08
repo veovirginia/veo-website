@@ -28,8 +28,9 @@ const schema = yup.object().shape({
 
 export default function Access() {
    const [message, setMessage] = useState("")
+   const [status, setStatus] = useState("")
    const [isVisible, setVisible] = useState(false)
-   // Todo: add notification for messages
+
    const {
       control,
       handleSubmit,
@@ -42,10 +43,20 @@ export default function Access() {
       mode: "onChange",
    })
    const submitHandler = async (values: FormFields) => {
-      console.log("dkso")
       const { email } = values
-      const response = await signIn("email", { email })
-      console.log(response)
+      const response = await signIn("email", {
+         email,
+         redirect: false,
+         callbackUrl: "http://localhost:3000/platform",
+      })
+      if (response?.ok) {
+         setMessage("Check your email for a signin link!")
+         setStatus("success")
+      } else {
+         setMessage("Error signing in. Please try again.")
+         setStatus("error")
+      }
+      setVisible(true)
    }
    return (
       <Layout>
@@ -62,10 +73,17 @@ export default function Access() {
                   Join the premiere entrepreneurship community
                </p>
             </div>
-            {isVisible && message && (
+            {isVisible && message && status === "success" && (
                <Alert
                   message={message}
-                  variant="alert"
+                  variant="success"
+                  onClose={() => setVisible(!isVisible)}
+               />
+            )}
+            {isVisible && message && status === "error" && (
+               <Alert
+                  message={message}
+                  variant="error"
                   onClose={() => setVisible(!isVisible)}
                />
             )}
@@ -114,7 +132,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
    if (session) {
       return {
          redirect: {
-            destination: "/onboard",
+            destination: "/platform",
          },
       }
    }
