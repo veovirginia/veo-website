@@ -5,6 +5,7 @@ import Email from "next-auth/providers/email"
 import { NextAuthOptions } from "next-auth"
 import { AdapterUser } from "next-auth/adapters"
 import { NextApiRequest, NextApiResponse } from "next"
+import _ from "lodash"
 
 export const ONE_DAY = 86400
 export const SEVEN_DAYS = 604800
@@ -26,10 +27,11 @@ const EmailProvider = Email({
 const session = async ({ session, token }: any) => {
    // TODO: type this
    const { user } = token
+   const sessionUser = _.omit(user, ["createdAt", "updatedAt", "emailVerified"])
 
    return {
       ...session,
-      user,
+      sessionUser,
    }
 }
 
@@ -45,8 +47,7 @@ const signIn = async ({ user }: any) => {
       },
       update: {},
       create: {
-         email: "dsoa@virginia.edu",
-         name: "",
+         email,
       },
    })
 
