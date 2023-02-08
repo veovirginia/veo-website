@@ -3,20 +3,24 @@ import cn from "classnames"
 import MemberRow from "../MemberRow"
 import { useContext, useState } from "react"
 import { OnboardContext } from "../../context/onboardContext"
+import { motion } from "framer-motion"
 
 const members = [
    {
       name: "Alex Becker",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/alex_photo.jpg",
       major: "Computer Science + Commerce",
       grad: "2023",
    },
    {
       name: "Jason He",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/jason_photo.jpg",
       major: "Computer Science + Commerce",
       grad: "2024",
    },
    {
       name: "David Xiang",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/alex_photo.jpg",
       major: "Computer Science + Statistics",
       grad: "2024",
    },
@@ -46,23 +50,26 @@ export default function StepTwo() {
       }
    }
    return (
-      <div className="flex flex-col w-full max-w-2xl mx-auto">
+      <motion.div className="flex flex-col w-full max-w-2xl mx-auto">
          <StepHeader
             step="2/3"
             title="Chat with us"
-            description="Select a member to meet with. Coffee's on us."
+            description="Meet with a member to learn about VEO"
          />
-         <div className="flex flex-col h-full px-4">
+         <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            className="flex flex-col h-full px-4"
+         >
             <div className="my-8 space-y-2 max-h-[24rem] overflow-auto">
-               {members.map(({ name, major, grad }, idx) => {
+               {members.map((member, idx) => {
                   idx += 1
                   return (
                      <MemberRow
                         index={idx}
-                        key={name}
-                        name={name}
-                        major={major}
-                        grad={grad}
+                        key={member.name}
+                        {...member}
                         onclick={(idx) => setRow(idx)}
                         selected={selectedRow}
                      />
@@ -90,7 +97,7 @@ export default function StepTwo() {
                   Continue
                </button>
             </div>
-         </div>
-      </div>
+         </motion.div>
+      </motion.div>
    )
 }

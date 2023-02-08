@@ -1,10 +1,12 @@
 import { BiCheck } from "react-icons/bi"
 import cn from "classnames"
 import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
 
 interface MemberRowProps {
    index: number
    name: string
+   image: string
    major: string
    grad: string
    onclick: (idx: number) => void
@@ -14,6 +16,7 @@ interface MemberRowProps {
 export default function MemberRow({
    index,
    name,
+   image,
    major,
    grad,
    onclick,
@@ -38,7 +41,15 @@ export default function MemberRow({
             />
          )}
          <div className="text-left flex gap-3 items-center">
-            <div className="rounded-full overflow-none w-10 h-10 bg-blue-500" />
+            <div className="flex items-center justify-center">
+               <Image
+                  src={image}
+                  width="40px"
+                  height="40px"
+                  className="rounded-full"
+                  alt={name}
+               />
+            </div>
             <div className="">
                <p className="text-zinc-100 text-base">{name}</p>
                <p className="text-sm text-noir-400">
@@ -53,7 +64,7 @@ export default function MemberRow({
                      initial={{ opacity: 0 }}
                      animate={{ opacity: 1 }}
                      exit={{ opacity: 0 }}
-                     transition={{ duration: 0.25, delay: 0.1 }}
+                     transition={{ duration: 0.15 }}
                   >
                      <BiCheck className="text-blue-500 text-2xl" />
                   </motion.div>

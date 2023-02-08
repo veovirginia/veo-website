@@ -8,8 +8,10 @@ import "yup-phone"
 import { yupResolver } from "@hookform/resolvers/yup"
 import PatternInput from "../PatternInput"
 import { OnboardContext } from "../../context/onboardContext"
+import { motion } from "framer-motion"
 
 interface Inputs {
+   name: string
    phone: string
    graduation: string
    major: string
@@ -17,6 +19,10 @@ interface Inputs {
 }
 
 const schema = yup.object().shape({
+   name: yup
+      .string()
+      .max(128, "Must not exceed 128 characters")
+      .required("Name required"),
    phone: yup
       .string()
       .phone("US", true, "Must be a valid US phone number")
@@ -40,11 +46,11 @@ export default function StepOne() {
       control,
       getValues,
       setValue,
-      reset,
       formState: { errors, isValid },
    } = useForm<Inputs>({
       resolver: yupResolver(schema),
       defaultValues: {
+         name: formContext?.formValues.info.name,
          phone: formContext?.formValues.info.phone,
          graduation: formContext?.formValues.info.graduation,
          major: formContext?.formValues.info.major,
@@ -62,7 +68,9 @@ export default function StepOne() {
    }
    useEffect(() => {
       if (formContext) {
-         const { phone, graduation, major, idea } = formContext.formValues.info
+         const { name, phone, graduation, major, idea } =
+            formContext.formValues.info
+         setValue("name", name)
          setValue("phone", phone)
          setValue("graduation", graduation)
          setValue("major", major)
@@ -71,19 +79,39 @@ export default function StepOne() {
       }
    }, [formContext])
    return (
-      <div className="flex flex-col w-full max-w-2xl mx-auto">
+      <motion.div className="flex flex-col w-full max-w-2xl mx-auto">
          <StepHeader
             step="1/3"
             title="Tell us about yourself"
-            description="Help us get to know you better."
+            description="Help us get to know you better"
          />
          {isLoading ? (
             <div className="flex justify-center text-noir-300 pt-12">
                Loading user information...
             </div>
          ) : (
-            <form className="flex flex-col justify-between h-full px-4">
+            <motion.form
+               initial={{ y: 50, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               exit={{ y: 50, opacity: 0 }}
+               className="flex flex-col justify-between h-full px-4"
+            >
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+                  <Controller
+                     name="name"
+                     control={control}
+                     render={({ field: { value, onChange } }) => (
+                        <Input
+                           label="Full Name"
+                           placeholder="John Doe"
+                           type="text"
+                           required
+                           value={value}
+                           onChange={onChange}
+                           error={errors.name}
+                        />
+                     )}
+                  />
                   <Controller
                      name="phone"
                      control={control}
@@ -157,8 +185,8 @@ export default function StepOne() {
                      Continue
                   </button>
                </div>
-            </form>
+            </motion.form>
          )}
-      </div>
+      </motion.div>
    )
 }

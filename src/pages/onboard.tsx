@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react"
 import { prisma } from "../helpers/db/index"
 import StepOne from "../components/onboard/StepOne"
 import StepTwo from "../components/onboard/StepTwo"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import StepThree from "../components/onboard/StepThree"
 import { getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
 import { OnboardContext } from "../context/onboardContext"
-import { OnboardContextInfo } from "../types/onboard"
+import { OnboardContextInfo } from "../types/types"
 
 function OnboardSteps() {
    const [step, setStep] = useState(1)
@@ -22,11 +22,13 @@ function OnboardSteps() {
       }
    }, [formContext])
    return (
-      <div className="flex flex-1">
-         {step === 1 && <StepOne />}
-         {step === 2 && <StepTwo />}
-         {step === 3 && <StepThree />}
-      </div>
+      <AnimatePresence>
+         <motion.div className="flex flex-1">
+            {step === 1 && <StepOne />}
+            {step === 2 && <StepTwo />}
+            {step === 3 && <StepThree />}
+         </motion.div>
+      </AnimatePresence>
    )
 }
 
@@ -62,7 +64,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
    if (!session) {
       return {
          redirect: {
-            destination: "/login",
+            destination: "/access",
          },
       }
    }
@@ -77,13 +79,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             props: {},
          }
       }
+      const { name, phone, graduation, major, idea } = res
       return {
          props: {
             data: {
-               phone: res.phoneNumber,
-               graduation: res.graduation,
-               major: res.major,
-               idea: res.idea,
+               name,
+               phone,
+               graduation,
+               major,
+               idea,
             },
          },
       }

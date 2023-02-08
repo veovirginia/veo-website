@@ -6,6 +6,7 @@ import { OnboardContext } from "../../context/onboardContext"
 import axios from "axios"
 import Alert from "../Alert"
 import Router from "next/router"
+import { motion } from "framer-motion"
 
 export default function StepThree() {
    const formContext = useContext(OnboardContext)
@@ -47,7 +48,7 @@ export default function StepThree() {
       try {
          const { data } = await axios("/api/user", {
             method: "put",
-            data: formContext?.formValues,
+            data: formContext?.formValues?.formValues.info,
          })
          if (data.success) {
             Router.push("/pending")
@@ -65,14 +66,19 @@ export default function StepThree() {
          <StepHeader
             step="3/3"
             title="Schedule a time and day"
-            description="Let us know when you want to meet."
+            description="Let us know when you want to meet"
          />
-         <div className="flex flex-col h-full px-4">
+         <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            className="flex flex-col h-full px-4"
+         >
             {isVisible && message && (
                <div className="max-w-2xl mx-auto pt-4">
                   <Alert
                      message={message}
-                     variant="alert"
+                     variant="error"
                      onClose={() => setVisible(!isVisible)}
                   />
                </div>
@@ -104,7 +110,7 @@ export default function StepThree() {
                   Finish
                </button>
             </div>
-         </div>
+         </motion.div>
       </div>
    )
 }
