@@ -1,26 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  @apply bg-background;
+   padding: 0;
+   margin: 0;
+   @apply bg-background;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+   color: inherit;
+   text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+   box-sizing: border-box;
 }
 
-.circle-bg {
-  background: radial-gradient(#ff4da355, #ff9aa626);
-  filter:blur(100px);
-  /* filter: contrast(170%) brightness(1000%);   */
+@font-face {
+   font-family: "Satoshi";
+   src: url("../../public/assets/fonts/Satoshi-Variable.ttf");
+}
+
+@font-face {
+   font-family: "Switzer";
+   src: url("../../public/assets/fonts/Switzer-Variable.ttf");
 }
