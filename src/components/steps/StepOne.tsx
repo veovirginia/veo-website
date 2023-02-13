@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react"
 import cn from "classnames"
-import Input from "../Input"
-import StepHeader from "../StepHeader"
+import { Input } from "../inputs"
+import StepHeader from "./StepHeader"
 import { useForm, Controller } from "react-hook-form"
 import * as yup from "yup"
 import "yup-phone"
 import { yupResolver } from "@hookform/resolvers/yup"
-import PatternInput from "../PatternInput"
+import { PatternInput } from "../inputs"
 import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
+import { ArrowButton } from "../buttons"
 
 interface Inputs {
    name: string
@@ -173,17 +174,14 @@ export default function StepOne() {
                   />
                </div>
                <div className="flex justify-center">
-                  <button
+                  <ArrowButton
+                     text="Continue"
                      type="button"
-                     onClick={() => nextHandler()}
-                     className={cn("rounded border px-8 py-2", {
-                        "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
-                        "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                           !isValid,
-                     })}
-                  >
-                     Continue
-                  </button>
+                     disabled={!isValid}
+                     direction="right"
+                     className="w-32"
+                     onClick={nextHandler}
+                  />
                </div>
             </motion.form>
          )}

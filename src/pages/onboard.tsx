@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { prisma } from "../helpers/db/index"
-import StepOne from "../components/onboard/StepOne"
-import StepTwo from "../components/onboard/StepTwo"
+import { StepOne, StepTwo, StepThree } from "../components/steps"
 import { AnimatePresence, motion } from "framer-motion"
-import StepThree from "../components/onboard/StepThree"
 import { getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
@@ -79,7 +77,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             props: {},
          }
       }
-      const { name, phone, graduation, major, idea } = res
+      const { name, phone, graduation, major, idea, onboarded } = res
+      if (onboarded) {
+         return {
+            redirect: {
+               destination: "/platform",
+            },
+         }
+      }
       return {
          props: {
             data: {

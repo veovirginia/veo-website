@@ -1,28 +1,40 @@
-import StepHeader from "../StepHeader"
-import cn from "classnames"
+import StepHeader from "./StepHeader"
 import MemberRow from "../MemberRow"
 import { useContext, useState } from "react"
 import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
+import { ArrowButton, Button } from "../buttons"
 
 const members = [
    {
       name: "Alex Becker",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/alex_photo.jpg",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328098/alex_photo.png",
       major: "Computer Science + Commerce",
       grad: "2023",
    },
    {
       name: "Jason He",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/jason_photo.jpg",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
       major: "Computer Science + Commerce",
       grad: "2024",
    },
    {
       name: "David Xiang",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1675828166/alex_photo.jpg",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318501/david_photo.png",
       major: "Computer Science + Statistics",
       grad: "2024",
+   },
+   {
+      name: "Clara Grimmelbein",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
+      major: "Computer Science + Commerce",
+      grad: "2026",
+   },
+   {
+      name: "Daivik Siddhi",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
+      major: "Computer Science + Economics",
+      grad: "2025",
    },
 ]
 
@@ -37,7 +49,7 @@ export default function StepTwo() {
          updateStep(1)
       }
    }
-   const nextHandler = () => {
+   const nextButton = () => {
       if (formContext) {
          const { updateMeeting, updateStep } = formContext
          if (selectedRow) {
@@ -62,40 +74,36 @@ export default function StepTwo() {
             exit={{ y: 50, opacity: 0 }}
             className="flex flex-col h-full px-4"
          >
-            <div className="my-8 space-y-2 max-h-[24rem] overflow-auto">
+            <div className="my-8 max-h-[24rem] overflow-auto">
                {members.map((member, idx) => {
-                  idx += 1
+                  const i = idx + 1
                   return (
                      <MemberRow
-                        index={idx}
+                        index={i}
                         key={member.name}
                         {...member}
-                        onclick={(idx) => setRow(idx)}
+                        onclick={(idx) => setRow(i)}
                         selected={selectedRow}
                      />
                   )
                })}
             </div>
             <div className="flex justify-between items-center ">
-               <button
+               <Button
+                  text="Back"
                   type="button"
-                  onClick={() => backHandler()}
-                  className="rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200"
-               >
-                  Back
-               </button>
-               <button
+                  variant="secondary"
+                  className="w-24"
+                  onClick={backHandler}
+               />
+               <ArrowButton
+                  text="Continue"
                   type="button"
-                  onClick={() => nextHandler()}
-                  className={cn("rounded border px-8 py-2", {
-                     "bg-zinc-50 text-neutral-900 border-zinc-50":
-                        selectedRow && selectedRow > 0,
-                     "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                        selectedRow && selectedRow <= 0,
-                  })}
-               >
-                  Continue
-               </button>
+                  disabled={selectedRow === undefined || selectedRow < 0}
+                  direction="right"
+                  className="w-32"
+                  onClick={nextButton}
+               />
             </div>
          </motion.div>
       </motion.div>
