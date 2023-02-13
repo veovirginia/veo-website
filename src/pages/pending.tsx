@@ -1,6 +1,9 @@
 import { AnimatePresence } from "framer-motion"
 import { GetServerSidePropsContext } from "next"
-import { useSession, getSession } from "next-auth/react"
+import { getSession } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { Button } from "../components/buttons"
 import Layout from "../components/layouts/Layout"
 import LinkCard from "../components/LinkCard"
 
@@ -10,26 +13,31 @@ const resources = [
       title: "Hoos Building",
       description:
          "Check out the curated list of startups that began here at UVA.",
+      color: "#E57200",
    },
    {
       link: "https://hoosbuilding.veovirginia.com/",
       title: "UVA Entrepreneurship",
       description:
          "Find entrepreneurship resources at UVA and the Charlottesville area.",
+      color: "#362FD9",
    },
    {
       link: "https://www.instagram.com/veoatuva/",
       title: "VEO Instagram",
       description: "Follow us on Instagram for latest news.",
+      color: "#D61355",
    },
    {
       link: "https://veovirginia.substack.com/",
       title: "VEO Substack",
       description: "Subscribe to our newsletter to stay up to date with VEO.",
+      color: "#6C00FF",
    },
 ]
 
 export default function Pending() {
+   const router = useRouter()
    return (
       <Layout>
          <AnimatePresence>
@@ -44,13 +52,22 @@ export default function Pending() {
                         While you&apos;re waiting for your coffee chat, check
                         out these links
                      </p>
-                     <div className="max-w-2xl mx-auto text-left grid grid-cols-1 md:grid-cols-2 gap-4 pt-12">
+                     <div className="max-w-2xl mx-auto text-left grid grid-cols-1 md:grid-cols-2 border-zinc-800 gap-2 mt-12">
                         {resources.map((resource) => (
                            <LinkCard key={resource.title} {...resource} />
                         ))}
                      </div>
                   </div>
                </div>
+               <Link href="/onboard">
+                  <Button
+                     text="Back to Onboarding"
+                     className="mt-8 w-fit mx-auto"
+                     variant="secondary"
+                     onClick={() => router.push("/onboard")}
+                     type={"button"}
+                  />
+               </Link>
             </div>
          </AnimatePresence>
       </Layout>
@@ -75,7 +92,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
          },
       }
    }
-   if (session.user.name) {
+   if (session.user.onboarded) {
       return {
          redirect: {
             destination: "/platform",
