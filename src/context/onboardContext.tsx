@@ -4,7 +4,7 @@ import {
    OnboardContextInfo,
    OnboardContextInterface,
    OnboardContextMeeting,
-} from "../types/onboard"
+} from "../types/types"
 
 export const OnboardContext = createContext<OnboardContextInterface | null>(
    null
@@ -18,6 +18,7 @@ export default function OnboardProvider({ children }: OnboardProviderProps) {
    const [step, setStep] = useState<number>(1)
    const [formValues, setValues] = useState<OnboardContextForm>({
       info: {
+         name: "",
          phone: "",
          graduation: "",
          major: "",
