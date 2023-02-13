@@ -17,14 +17,13 @@ export default async function put(
             ...body,
          },
       })
+      // Return creation status
+      return res.status(200).json({
+         message: "Updated user.",
+      })
    } catch (error: any) {
       return res.status(500).json({
          message: "Unable to update user information. Please try again later.",
       })
    }
-
-   // Return creation status
-   return res.status(200).json({
-      message: "Updated user.",
-   })
 }
