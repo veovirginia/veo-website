@@ -16,20 +16,21 @@ const Navbar = () => {
          </div>
          <div className="flex items-center space-x-8 text-sm">
             {session?.user ? (
-               <button onClick={() => signOut()} className="text-white">
+               <button
+                  onClick={() => signOut()}
+                  className="text-zinc-50 px-4 py-2 rounded bg-transparent border-neutral-700 hover:border-zinc-50 hover:bg-zinc-50 hover:text-neutral-900 transition-colors duration-125 border"
+               >
                   Log out
                </button>
             ) : (
-               <p className="flex items-center text-neutral-400 space-x-6">
-                  <Link href="/access" passHref>
-                     <button
-                        type="button"
-                        className="text-zinc-50 px-4 py-2 rounded bg-transparent border-neutral-700 hover:border-zinc-50 hover:bg-zinc-50 hover:text-neutral-900 transition-colors duration-125 border"
-                     >
-                        Platform Access
-                     </button>
-                  </Link>
-               </p>
+               <Link href="/access" passHref>
+                  <button
+                     type="button"
+                     className="text-zinc-50 px-4 py-2 rounded bg-transparent border-neutral-700 hover:border-zinc-50 hover:bg-zinc-50 hover:text-neutral-900 transition-colors duration-125 border"
+                  >
+                     Platform Access
+                  </button>
+               </Link>
             )}
          </div>
       </div>

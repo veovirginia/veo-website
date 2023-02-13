@@ -1,3 +1,32 @@
+// User
+export interface SessionUser {
+   email: string
+   graduation: string
+   id: string
+   idea: string
+   image: string
+   major: string
+   name: string
+   onboarded: boolean
+   phone: string
+   role: string
+}
+
+// PUT User Body
+export interface PutUserBody {
+   email?: string
+   graduation?: string
+   id?: string
+   idea?: string
+   image?: string
+   major?: string
+   name?: string
+   onboarded?: boolean
+   phone?: string
+   role?: string
+}
+
+// Onboard Context
 export interface OnboardContextInterface {
    step: number
    formValues: OnboardContextForm
@@ -12,6 +41,7 @@ export interface OnboardContextForm {
 }
 
 export interface OnboardContextInfo {
+   name: string
    phone: string
    graduation: string
    major: string

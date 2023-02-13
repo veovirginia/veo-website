@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import cn from "classnames"
 import { FieldError } from "react-hook-form"
 
@@ -23,7 +23,11 @@ export default function Input({
    error,
    onChange,
 }: InputProps) {
-   const [val, setVal] = useState(value)
+   const [val, setVal] = useState("")
+
+   useEffect(() => {
+      setVal(value)
+   }, [value])
 
    return (
       <div className="text-left">

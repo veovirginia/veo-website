@@ -15,7 +15,7 @@ model User {
   onboarded     Boolean?  @default(false)
   role          String    @default("user")
   image         String?   @default("")
-  phoneNumber   String?   @default("")
+  phone         String?   @default("")
   graduation    String?   @default("")
   major         String?   @default("")
   idea          String?   @default("")

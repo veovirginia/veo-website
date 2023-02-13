@@ -1,56 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { prisma } from "../../../helpers/db"
-import { OnboardContextForm } from "../../../types/onboard"
 import { getSession } from "next-auth/react"
+import put from "./put"
 
 export default async function handler(
    req: NextApiRequest,
    res: NextApiResponse
 ) {
-   // Check empty body
-   if (!req.body) {
-      return res.status(400).json({ error: "Empty request body." })
-   }
+   const { method, body } = req
 
-   // Check request method
-   if (req.method !== "PUT") {
-      return res.status(405).json({ error: "Invalid HTTP method." })
-   }
+   // TODO: Add body schema validation
 
    const session = await getSession({ req })
 
    // Check if logged in
    if (!session) {
-      return res.status(401).json({ error: "Must be logged in." })
+      return res.status(401).json({ message: "Must be logged in." })
    }
 
-   const { info }: OnboardContextForm = req.body
-   const { phone, graduation, major, idea } = info
-
-   console.log(info)
-
-   // Update account in DB
-   try {
-      await prisma.user.update({
-         where: {
-            email: session.user.email,
-         },
-         data: {
-            phoneNumber: phone,
-            graduation: graduation,
-            major: major,
-            idea: idea,
-         },
-      })
-   } catch (error: any) {
-      return res.status(500).json({
-         error: "Unable to update user information. Please try again later.",
-      })
+   // Update user info
+   if (method === "PUT") {
+      // Check empty body
+      if (!body) {
+         return res.status(400).json({ message: "Empty request body." })
+      }
+      put(res, body, session.user)
    }
 
-   // Return creation status
-   return res.status(200).json({
-      success: true,
-      message: "Updated user.",
-   })
+   // Check request method
+   return res.status(405).json({ message: "Invalid HTTP method." })
 }
