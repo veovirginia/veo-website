@@ -23,8 +23,3 @@ a {
    font-family: "Satoshi";
    src: url("../../public/assets/fonts/Satoshi-Variable.ttf");
 }
-
-@font-face {
-   font-family: "Switzer";
-   src: url("../../public/assets/fonts/Switzer-Variable.ttf");
-}
