@@ -15,7 +15,7 @@ export default function Alert({ message, variant, onClose }: AlertProps) {
             {
                "border-vesuvius-900 bg-vesuvius-900/30 rounded text-vesuvius-600":
                   variant === "error",
-               "border-blue-900 bg-blue-900/30 rounded text-blue-600":
+               "border-blue-900 bg-blue-900/20 rounded text-blue-600":
                   variant === "success",
             }
          )}

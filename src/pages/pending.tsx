@@ -2,20 +2,30 @@ import { AnimatePresence } from "framer-motion"
 import { GetServerSidePropsContext } from "next"
 import { useSession, getSession } from "next-auth/react"
 import Layout from "../components/layouts/Layout"
-import PendingLink from "../components/PendingLink"
+import LinkCard from "../components/LinkCard"
 
 const resources = [
    {
       link: "https://hoosbuilding.veovirginia.com/",
       title: "Hoos Building",
       description:
-         "Quisque tempor nunc sit amet metus luctus cursus. Etiam erat elit, gravida quis ante ut, ornare vestibulum ante. Cras porta enim lectus.",
+         "Check out the curated list of startups that began here at UVA.",
    },
    {
       link: "https://hoosbuilding.veovirginia.com/",
       title: "UVA Entrepreneurship",
       description:
-         "Quisque tempor nunc sit amet metus luctus cursus. Etiam erat elit, gravida quis ante ut, ornare vestibulum ante. Cras porta enim lectus.",
+         "Find entrepreneurship resources at UVA and the Charlottesville area.",
+   },
+   {
+      link: "https://www.instagram.com/veoatuva/",
+      title: "VEO Instagram",
+      description: "Follow us on Instagram for latest news.",
+   },
+   {
+      link: "https://veovirginia.substack.com/",
+      title: "VEO Substack",
+      description: "Subscribe to our newsletter to stay up to date with VEO.",
    },
 ]
 
@@ -34,9 +44,9 @@ export default function Pending() {
                         While you&apos;re waiting for your coffee chat, check
                         out these links
                      </p>
-                     <div className="max-w-2xl mx-auto text-left grid grid-cols-1 md:grid-cols-2 gap-4 pt-10">
+                     <div className="max-w-2xl mx-auto text-left grid grid-cols-1 md:grid-cols-2 gap-4 pt-12">
                         {resources.map((resource) => (
-                           <PendingLink key={resource.title} {...resource} />
+                           <LinkCard key={resource.title} {...resource} />
                         ))}
                      </div>
                   </div>
