@@ -2,6 +2,7 @@ import { AnimatePresence } from "framer-motion"
 import { GetServerSidePropsContext } from "next"
 import { getSession } from "next-auth/react"
 import Link from "next/link"
+import { prisma } from "../helpers/db"
 import { useRouter } from "next/router"
 import { Button } from "../components/buttons"
 import Layout from "../components/layouts/Layout"
@@ -98,6 +99,33 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             destination: "/platform",
          },
       }
+   }
+   if (!session.user.onboarded) {
+      try {
+         const dbUser = await prisma.user.findUnique({
+            where: {
+               email: session.user.email,
+            },
+         })
+         if (dbUser?.onboarded) {
+            return {
+               props: {
+                  redirect: {
+                     destination: "/platform",
+                  },
+               },
+            }
+         }
+      } catch (error: any) {
+         return {
+            props: {
+               error: "Unable to retrieve user information.",
+            },
+         }
+      }
+   }
+   return {
+      props: {},
    }
    return {
       props: {},

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { prisma } from "../helpers/db/index"
+import { prisma } from "../helpers/db"
 import { StepOne, StepTwo, StepThree } from "../components/steps"
 import { AnimatePresence, motion } from "framer-motion"
 import { getSession } from "next-auth/react"
@@ -82,6 +82,26 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
          return {
             redirect: {
                destination: "/platform",
+            },
+         }
+      }
+      try {
+         const dbUser = await prisma.user.findUnique({
+            where: {
+               email: session.user.email,
+            },
+         })
+         if (dbUser?.onboarded) {
+            return {
+               redirect: {
+                  destination: "/platform",
+               },
+            }
+         }
+      } catch (error: any) {
+         return {
+            props: {
+               error: "Unable to retrieve user information.",
             },
          }
       }

@@ -56,7 +56,6 @@ export default function StepThree() {
             data: formContext?.formValues.info,
          })
          if (res.status === 200) {
-            console.log("doak")
             signIn("refresh-session", {
                redirect: true,
                callbackUrl: "http://localhost:3000/pending",
@@ -64,7 +63,6 @@ export default function StepThree() {
                // @ts-ignore
                token: session?.token,
                email: session?.user.email,
-               refresh: true,
             })
          }
       } catch (error: any) {

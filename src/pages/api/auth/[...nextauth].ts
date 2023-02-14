@@ -6,6 +6,8 @@ import { NextAuthOptions } from "next-auth"
 import { AdapterUser } from "next-auth/adapters"
 import { NextApiRequest, NextApiResponse } from "next"
 import _ from "lodash"
+import jwt, { verify } from "jsonwebtoken"
+import Credentials from "next-auth/providers/credentials"
 
 export const ONE_DAY = 86400
 export const SEVEN_DAYS = 604800
@@ -14,24 +16,55 @@ const EmailProvider = Email({
    id: "email",
    name: "email",
    server: {
-      host: process.env.EMAIL_HOST,
-      port: Number(process.env.EMAIL_PORT),
+      host: "smtp.ethereal.email",
+      port: 587,
       auth: {
-         user: process.env.EMAIL_USER,
-         pass: process.env.EMAIL_PASSWORD,
+         user: "clementina.olson@ethereal.email",
+         pass: "aqe1jfdmT6j1yEY9HN",
       },
    },
-   from: process.env.EMAIL_FROM,
+   from: "clementina.olson@ethereal.email",
+})
+
+const CredentialsProvider = Credentials({
+   id: "refresh-session",
+   name: "refresh-session",
+   credentials: {},
+   // @ts-ignore
+   async authorize(credentials: any) {
+      const { token, refresh, email } = credentials
+
+      if (token) {
+         try {
+            const id = await verify(token, process.env.NEXTAUTH_SECRET)
+            if (!id) return null
+
+            const dbUser = await prisma.user.findUnique({
+               where: {
+                  id: id as string,
+               },
+            })
+            if (dbUser && dbUser.email !== email) return false
+            if (!dbUser) return false
+            return { ...dbUser, refresh }
+         } catch (e) {
+            console.log(e)
+         }
+      }
+      return null
+   },
 })
 
 const session = async ({ session, token }: any) => {
    // TODO: type this
    const { user } = token
+   const authToken = jwt.sign(user.id, process.env.NEXTAUTH_SECRET)
    const sessionUser = _.omit(user, ["createdAt", "updatedAt", "emailVerified"])
 
    return {
       ...session,
-      sessionUser,
+      user: { ...sessionUser },
+      token: authToken,
    }
 }
 
@@ -56,7 +89,7 @@ const signIn = async ({ user }: any) => {
 
 export const authOptions = (): NextAuthOptions => ({
    adapter: PrismaAdapter(prisma),
-   providers: [EmailProvider],
+   providers: [EmailProvider, CredentialsProvider],
    pages: {
       signIn: "/access",
       // signOut: "/signout",

@@ -97,7 +97,7 @@ export default function StepTwo() {
                   onClick={backHandler}
                />
                <ArrowButton
-                  text="Continue"
+                  text="Next"
                   type="button"
                   disabled={selectedRow === undefined || selectedRow < 0}
                   direction="right"

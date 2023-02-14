@@ -7,9 +7,7 @@ import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { GetServerSidePropsContext } from "next"
 import { getSession } from "next-auth/react"
-
 import Alert from "../components/Alert"
-import { motion } from "framer-motion"
 import { ArrowButton } from "../components/buttons"
 
 interface FormFields {
@@ -31,7 +29,6 @@ export default function Access() {
    const [message, setMessage] = useState("")
    const [status, setStatus] = useState("")
    const [isVisible, setVisible] = useState(false)
-   const [isButtonHover, setButtonHover] = useState(false)
 
    const {
       control,
