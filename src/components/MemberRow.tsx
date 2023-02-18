@@ -26,7 +26,7 @@ export default function MemberRow({
       <button
          onClick={() => onclick(index)}
          className={cn(
-            "relative p-3 py-2 flex w-full items-center justify-between hover:bg-noir-800/20 transition-colors ease-in duration-100 border-noir-700/50 border rounded"
+            "relative p-3 flex w-full items-center justify-between hover:bg-noir-800/20 transition-colors ease-in duration-100 border-noir-700/50 border-t last:border-b border-x first:rounded-t last:rounded-b"
          )}
       >
          {selected === index && (
@@ -37,7 +37,7 @@ export default function MemberRow({
                }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
-               className="absolute top-0 left-0 h-full w-full border rounded !border-blue-500/75 !bg-blue-500/10"
+               className="absolute top-0 left-0 h-full w-full rounded border !border-blue-500/75 !bg-blue-500/10"
             />
          )}
          <div className="text-left flex gap-3 items-center">
@@ -51,7 +51,7 @@ export default function MemberRow({
                />
             </div>
             <div className="">
-               <p className="text-zinc-100 text-base">{name}</p>
+               <p className="text-zinc-100 text-sm">{name}</p>
                <p className="text-sm text-noir-400">
                   {major} • Class of {grad}
                </p>

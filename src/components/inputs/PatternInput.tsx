@@ -1,5 +1,5 @@
-import { useState } from "react"
 import cn from "classnames"
+import { ChangeEvent } from "react"
 import { FieldError } from "react-hook-form"
 import { PatternFormat } from "react-number-format"
 
@@ -35,7 +35,7 @@ export default function PatternInput({
          <p className="text-sm text-noir-300 font-regular pb-2">{label}</p>
          <PatternFormat
             className={cn(
-               "border-neo-gray-800 bg-noir-900 outline-none text-neutral-400 placeholder:text-noir-500 w-full p-2 rounded focus:outline-blue-500 outline-offset-0 border focus:border-light-background-border transition-all duration-125 ease-in-out",
+               "border-neo-gray-800 bg-noir-800/10 outline-none text-neutral-400 placeholder:text-noir-500 w-full p-2 rounded focus:outline-blue-500 outline-offset-0 border focus:border-light-background-border transition-all duration-125 ease-in-out",
                {
                   "border-red-500": error,
                }
@@ -48,7 +48,7 @@ export default function PatternInput({
             value={value}
             required={required}
             disabled={disabled}
-            onChange={(event: any) => {
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
                const target = event.target as HTMLInputElement
                if (target) {
                   onValueChange(event.target?.value)

@@ -1,15 +1,14 @@
-import Input from "../components/Input"
+import { Input } from "../components/inputs"
 import Layout from "../components/layouts/Layout"
 import { Controller, useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
-import cn from "classnames"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { GetServerSidePropsContext } from "next"
 import { getSession } from "next-auth/react"
-
 import Alert from "../components/Alert"
+import { ArrowButton } from "../components/buttons"
 
 interface FormFields {
    email: string
@@ -60,9 +59,9 @@ export default function Access() {
    }
    return (
       <Layout>
-         <div className="max-w-sm w-full mx-auto pt-24 px-4">
-            <div className="text-center pb-4">
-               <h1 className="text-3xl font-semibold text-white mx-auto">
+         <div className="max-w-md w-full mx-auto pt-24 px-4">
+            <div className="text-center pb-8">
+               <h1 className="text-3xl font-bold text-white mx-auto font-display">
                   Welcome to
                   {/* Animating gradient? */}
                   <span className="ml-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
@@ -105,20 +104,13 @@ export default function Access() {
                      )}
                   />
                </div>
-               <button
+               <ArrowButton
+                  text="Sign in"
                   type="submit"
                   disabled={!isValid}
-                  className={cn(
-                     "transition-colors duration-125 text-base w-full px-2 py-2 border rounded flex justify-center items-center space-x-2",
-                     {
-                        "bg-zinc-50 text-neutral-900 border-zinc-50": isValid,
-                        "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                           !isValid,
-                     }
-                  )}
-               >
-                  <span>Sign in</span>
-               </button>
+                  direction="right"
+                  className="w-full"
+               />
             </form>
          </div>
       </Layout>

@@ -1,4 +1,4 @@
-import StepHeader from "../StepHeader"
+import StepHeader from "./StepHeader"
 import cn from "classnames"
 import { useContext, useEffect, useState } from "react"
 import Cal, { getCalApi } from "@calcom/embed-react"
@@ -7,7 +7,8 @@ import axios from "axios"
 import Alert from "../Alert"
 import { useRouter } from "next/router"
 import { motion } from "framer-motion"
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
+import { Button } from "../buttons"
 
 export default function StepThree() {
    const formContext = useContext(OnboardContext)
@@ -26,12 +27,12 @@ export default function StepThree() {
             hideEventTypeDetails: false,
          })
          if (cal) {
-            console.log("cal not undefined")
             cal("on", {
                action: "bookingSuccessful",
-               callback: (e: any) => {
-                  const { data } = e.detail
+               callback: (error: any) => {
+                  const { data } = error.detail
                   if (data.confirmed === true) {
+                     console.log("dkoa")
                      setScheduled(true)
                   }
                },
@@ -49,17 +50,29 @@ export default function StepThree() {
 
    const submitHandler = async () => {
       try {
+         console.log(formContext?.formValues)
          const res = await axios("/api/user", {
             method: "put",
             data: formContext?.formValues.info,
          })
-         if (res.status === 200) router.push("/pending")
+         if (res.status === 200) {
+            signIn("refresh-session", {
+               redirect: true,
+               callbackUrl: "http://localhost:3000/pending",
+               id: session?.user.id,
+               // @ts-ignore
+               token: session?.token,
+               email: session?.user.email,
+            })
+         }
       } catch (error: any) {
          setMessage(
             "Unable to update user information. Please try again later."
          )
          setVisible(true)
       }
+
+      // router.push("/pending")
    }
 
    return (
@@ -87,7 +100,7 @@ export default function StepThree() {
             <div className="my-8">
                <Cal
                   calLink="entrepreneurship/onboard"
-                  style={{ width: "100%", height: "100%", overflow: "auto" }}
+                  // style={{ width: "100" }}
                   config={{
                      name: formContext?.formValues.info.name,
                      email: session?.user?.email,
@@ -95,26 +108,21 @@ export default function StepThree() {
                   }}
                />
             </div>
-            <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-4">
-               <button
+            <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-10">
+               <Button
+                  text="Back"
                   type="button"
-                  onClick={() => backHandler()}
-                  className="rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200"
-               >
-                  Back
-               </button>
-               <button
+                  variant="secondary"
+                  className="w-24"
+                  onClick={backHandler}
+               />
+               <Button
+                  text="Finish"
                   type="button"
+                  className="w-32"
                   disabled={!isScheduled}
-                  onClick={() => submitHandler}
-                  className={cn("rounded border px-8 py-2", {
-                     "bg-zinc-50 text-neutral-900 border-zinc-50": isScheduled,
-                     "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
-                        !isScheduled,
-                  })}
-               >
-                  Finish
-               </button>
+                  onClick={submitHandler}
+               />
             </div>
          </motion.div>
       </div>
