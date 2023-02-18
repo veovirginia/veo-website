@@ -16,14 +16,13 @@ export default async function handler(
    if (!session) {
       return res.status(401).json({ message: "Must be logged in." })
    }
-
    // Update user info
    if (method === "PUT") {
       // Check empty body
       if (!body) {
          return res.status(400).json({ message: "Empty request body." })
       }
-      put(res, body, session.user)
+      return put(res, body, session.user)
    }
 
    // Check request method
