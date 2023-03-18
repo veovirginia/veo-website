@@ -49,6 +49,12 @@ export interface OnboardContextInfo {
 }
 
 export interface OnboardContextMeeting {
-   member: [string, number]
+   member: OnboardContextMember
    isScheduled: boolean
+}
+
+export interface OnboardContextMember {
+   name: string
+   index: number
+   calendar: string
 }

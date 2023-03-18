@@ -25,7 +25,11 @@ export default function OnboardProvider({ children }: OnboardProviderProps) {
          idea: "",
       },
       meeting: {
-         member: ["", -1],
+         member: {
+            name: "",
+            index: -1,
+            calendar: "",
+         },
          isScheduled: false,
       },
    })

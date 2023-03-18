@@ -11,37 +11,47 @@ const members = [
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328098/alex_photo.png",
       major: "Computer Science + Commerce",
       grad: "2023",
+      calendar: "alexmbckr/veo-onboard-meeting",
    },
    {
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
       major: "Computer Science + Commerce",
       grad: "2024",
+      calendar: "jasonjche/veo-onboard-meeting",
    },
    {
       name: "David Xiang",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318501/david_photo.png",
       major: "Computer Science + Statistics",
       grad: "2024",
+      calendar: "davidxiang/veo-onboard-meeting",
    },
    {
-      name: "Clara Grimmelbein",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
-      major: "Computer Science + Commerce",
-      grad: "2026",
-   },
-   {
-      name: "Daivik Siddhi",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
-      major: "Computer Science + Economics",
+      name: "Michael Fatemi",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
+      major: "Computer Science",
       grad: "2025",
+      calendar: "michael-fatemi-vnsw6q/veo-onboard-meeting",
    },
+   // {
+   //    name: "Clara Grimmelbein",
+   //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
+   //    major: "Computer Science + Commerce",
+   //    grad: "2026",
+   // },
+   // {
+   //    name: "Daivik Siddhi",
+   //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
+   //    major: "Computer Science + Economics",
+   //    grad: "2025",
+   // },
 ]
 
 export default function StepTwo() {
    const formContext = useContext(OnboardContext)
    const [selectedRow, setRow] = useState(
-      formContext?.formValues.meeting.member[1]
+      formContext?.formValues.meeting.member.index
    )
    const backHandler = () => {
       if (formContext) {
@@ -52,9 +62,16 @@ export default function StepTwo() {
    const nextButton = () => {
       if (formContext) {
          const { updateMeeting, updateStep } = formContext
-         if (selectedRow) {
+         // Better than `if (selectedRow)` because this method counts 0 as valid
+         if (selectedRow !== undefined) {
+            console.log("sel row: ", selectedRow)
+            console.log(members[selectedRow])
             updateMeeting({
-               member: [members[selectedRow - 1].name, selectedRow - 1],
+               member: {
+                  name: members[selectedRow].name,
+                  calendar: members[selectedRow].calendar,
+                  index: selectedRow,
+               },
                isScheduled: false,
             })
          }
@@ -75,14 +92,13 @@ export default function StepTwo() {
             className="flex flex-col h-full px-4"
          >
             <div className="my-8 max-h-[24rem] overflow-auto">
-               {members.map((member, idx) => {
-                  const i = idx + 1
+               {members.map((member, i) => {
                   return (
                      <MemberRow
                         index={i}
                         key={member.name}
                         {...member}
-                        onclick={(idx) => setRow(i)}
+                        onclick={() => setRow(i)}
                         selected={selectedRow}
                      />
                   )

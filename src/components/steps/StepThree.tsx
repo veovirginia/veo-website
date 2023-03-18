@@ -98,15 +98,21 @@ export default function StepThree() {
                </div>
             )}
             <div className="my-8">
-               <Cal
-                  calLink="entrepreneurship/onboard"
-                  // style={{ width: "100" }}
-                  config={{
-                     name: formContext?.formValues.info.name,
-                     email: session?.user?.email,
-                     notes: `Meeting with ${formContext?.formValues.meeting.member[0]}`,
-                  }}
-               />
+               {formContext?.formValues.meeting.member ? (
+                  <Cal
+                     calLink={formContext?.formValues.meeting.member.calendar}
+                     // style={{ width: "100" }}
+                     config={{
+                        name: formContext?.formValues.info.name,
+                        email: session?.user?.email,
+                     }}
+                  />
+               ) : (
+                  <div>
+                     Scheduling calendar unavailable at the moment. Please try
+                     again later.
+                  </div>
+               )}
             </div>
             <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-10">
                <Button
