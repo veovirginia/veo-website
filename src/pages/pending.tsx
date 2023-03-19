@@ -40,7 +40,10 @@ const resources = [
 export default function Pending() {
    const router = useRouter()
    return (
-      <Layout>
+      <Layout
+         page="Pending Approval"
+         description="Hang tight! Your account is awaiting approval from administrators."
+      >
          <AnimatePresence>
             <div className="flex flex-col w-full max-w-2xl mx-auto px-4">
                <div>

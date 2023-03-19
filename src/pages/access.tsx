@@ -58,12 +58,14 @@ export default function Access() {
       setVisible(true)
    }
    return (
-      <Layout>
+      <Layout
+         page="Platform Access"
+         description="Sign in using your UVA email to access the VEO Platform."
+      >
          <div className="max-w-md w-full mx-auto pt-24 px-4">
             <div className="text-center pb-8">
                <h1 className="text-3xl font-bold text-white mx-auto font-display">
                   Welcome to
-                  {/* Animating gradient? */}
                   <span className="ml-2 bg-gradient-to-br from-[#2a63ff] via-[#613cf4] to-[#ea3be1] overflow-visible bg-clip-text text-transparent">
                      VEO
                   </span>
