@@ -16,14 +16,14 @@ const EmailProvider = Email({
    id: "email",
    name: "email",
    server: {
-      host: "smtp.ethereal.email",
-      port: 587,
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
       auth: {
-         user: "clementina.olson@ethereal.email",
-         pass: "aqe1jfdmT6j1yEY9HN",
+         user: process.env.EMAIL_USER,
+         pass: process.env.EMAIL_PASSWORD,
       },
    },
-   from: "clementina.olson@ethereal.email",
+   from: process.env.EMAIL_FROM,
 })
 
 const CredentialsProvider = Credentials({

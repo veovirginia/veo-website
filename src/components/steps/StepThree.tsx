@@ -58,7 +58,7 @@ export default function StepThree() {
          if (res.status === 200) {
             signIn("refresh-session", {
                redirect: true,
-               callbackUrl: "http://localhost:3000/pending",
+               callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/pending"`,
                id: session?.user.id,
                // @ts-ignore
                token: session?.token,

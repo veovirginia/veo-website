@@ -46,7 +46,7 @@ export default function Access() {
       const response = await signIn("email", {
          email,
          redirect: false,
-         callbackUrl: "http://localhost:3000/platform",
+         callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/platform`,
       })
       if (response?.ok) {
          setMessage("Check your email for a signin link!")

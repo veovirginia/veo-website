@@ -16,7 +16,7 @@ export default function Dashboard({ refreshSession }: DashboardProps) {
       if (refreshSession) {
          signIn("refresh-session", {
             redirect: true,
-            callbackUrl: `http://localhost:3000/${router.pathname}`,
+            callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/${router.pathname}`,
             id: session?.user.id,
             // @ts-ignore
             token: session?.token,
