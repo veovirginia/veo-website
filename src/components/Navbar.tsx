@@ -1,37 +1,32 @@
-import { Session } from "next-auth"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
+import { Button } from "./buttons"
 import Logo from "./SVG/Logo"
 
-interface NavbarProps {
-   session: Session | null
-}
-
-const Navbar = ({ session }: NavbarProps) => {
+const Navbar = () => {
+   const { data: session } = useSession()
    return (
-      <div className="max-w-5xl mx-auto py-10 flex items-center justify-between px-4">
-         <div className="cursor-pointer flex items-center space-x-4 relative">
-            <span className="z-10">
-               <Logo />
-            </span>
-            <h1 className="z-10 font-semibold text-xl text-white tracking-wider">
-               VEO
-            </h1>
-            <div className="opacity-30 absolute -top-[8rem] -left-[8rem] circle-bg h-[24rem] w-[24rem] rounded-full" />
-         </div>
-         <div className="flex items-center space-x-8">
+      <div className="w-full max-w-5xl mx-auto py-5 flex items-center justify-between px-4">
+         <Link href="/">
+            <div className="cursor-pointer flex items-center space-x-4 relative">
+               <span className="z-10">
+                  <Logo />
+               </span>
+               <h1 className="z-10 font-semibold text-lg text-white tracking-wider">
+                  VEO
+               </h1>
+            </div>
+         </Link>
+         <div className="flex items-center space-x-8 text-sm">
             {session?.user ? (
-               <button onClick={() => signOut()} className="text-white">
-                  Log out
-               </button>
+               <Button onClick={() => signOut()} type="button" text="Log out" />
             ) : (
-               <Link href="/register" passHref>
-                  <button
+               <Link href="/access" passHref>
+                  <Button
                      type="button"
-                     className="shadow-lg text-black px-8 py-2 rounded-full bg-white"
-                  >
-                     Join
-                  </button>
+                     text="Platform Access"
+                     variant="secondary"
+                  />
                </Link>
             )}
          </div>

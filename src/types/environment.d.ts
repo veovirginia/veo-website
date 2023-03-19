@@ -6,7 +6,10 @@ declare global {
          GOOGLE_CLIENT_ID: string
          GOOGLE_CLIENT_SECRET: string
          NEXTAUTH_SECRET: string
-         NODE_ENV: "development" | "production"
+         NEXT_PUBLIC_NEXTAUTH_URL: string
+         NODE_ENV: "development" | "production" | "staging"
+         MAILJET_API_KEY: string
+         MAILJET_SECRET_KEY: string
       }
    }
 }

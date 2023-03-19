@@ -1,53 +1,56 @@
-import { useState } from "react"
-import { OnboardProvider } from "../components/context/onboard"
-import cn from "classnames"
-import StepOne from "../components/onboard/StepOne"
-import StepTwo from "../components/onboard/StepTwo"
-import { AnimatePresence } from "framer-motion"
-import StepThree from "../components/onboard/StepThree"
-import { getSession, useSession } from "next-auth/react"
+import { useContext, useEffect, useState } from "react"
+import { prisma } from "../helpers/db"
+import { StepOne, StepTwo, StepThree } from "../components/steps"
+import { AnimatePresence, motion } from "framer-motion"
+import { getSession } from "next-auth/react"
 import { GetServerSidePropsContext } from "next"
 import Layout from "../components/layouts/Layout"
+import { OnboardContext } from "../context/onboardContext"
+import { OnboardContextInfo } from "../types/types"
 
-export default function Onboard() {
-   const { data: session } = useSession()
+function OnboardSteps() {
    const [step, setStep] = useState(1)
+
+   const formContext = useContext(OnboardContext)
+
+   useEffect(() => {
+      if (formContext) {
+         const { step: ctxStep } = formContext
+         setStep(ctxStep)
+      }
+   }, [formContext])
+   return (
+      <AnimatePresence>
+         <motion.div className="flex flex-1">
+            {step === 1 && <StepOne />}
+            {step === 2 && <StepTwo />}
+            {step === 3 && <StepThree />}
+         </motion.div>
+      </AnimatePresence>
+   )
+}
+
+interface OnboardPageProps {
+   data: OnboardContextInfo
+}
+
+export default function Onboard({ data }: OnboardPageProps) {
+   const formContext = useContext(OnboardContext)
+
+   useEffect(() => {
+      if (formContext) {
+         const { updateInfo } = formContext
+         updateInfo(data)
+      }
+   }, [])
 
    return (
       <Layout>
-         <OnboardProvider>
-            <div className="pt-20 max-w-2xl mx-auto min-h-[40rem] flex flex-col justify-between">
-               <AnimatePresence>
-                  <div>
-                     {step === 1 && <StepOne />}
-                     {step === 2 && <StepTwo />}
-                     {step === 3 && <StepThree />}
-                  </div>
-                  <div
-                     className={cn("flex w-full", {
-                        "justify-center": step == 1,
-                        "justify-between": step >= 2,
-                     })}
-                  >
-                     <button
-                        onClick={() => setStep(step - 1)}
-                        className={cn("rounded bg-white text-black px-6 py-2", {
-                           hidden: step === 1,
-                           block: step >= 2,
-                        })}
-                     >
-                        Go back
-                     </button>
-                     <button
-                        onClick={() => step < 3 && setStep(step + 1)}
-                        className="rounded bg-white text-black px-16 py-2"
-                     >
-                        {step < 3 ? "Continue" : "Finish"}
-                     </button>
-                  </div>
-               </AnimatePresence>
+         <AnimatePresence>
+            <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
+               <OnboardSteps />
             </div>
-         </OnboardProvider>
+         </AnimatePresence>
       </Layout>
    )
 }
@@ -59,11 +62,65 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
    if (!session) {
       return {
          redirect: {
-            destination: "/login",
+            destination: "/access",
          },
       }
    }
-   return {
-      props: {},
+   try {
+      const res = await prisma.user.findUnique({
+         where: {
+            email: session.user.email,
+         },
+      })
+      if (!res) {
+         return {
+            props: {},
+         }
+      }
+      const { name, phone, graduation, major, idea, onboarded } = res
+      if (onboarded) {
+         return {
+            redirect: {
+               destination: "/platform",
+            },
+         }
+      }
+      try {
+         const dbUser = await prisma.user.findUnique({
+            where: {
+               email: session.user.email,
+            },
+         })
+         if (dbUser?.onboarded) {
+            return {
+               redirect: {
+                  destination: "/platform",
+               },
+            }
+         }
+      } catch (error: any) {
+         return {
+            props: {
+               error: "Unable to retrieve user information.",
+            },
+         }
+      }
+      return {
+         props: {
+            data: {
+               name,
+               phone,
+               graduation,
+               major,
+               idea,
+            },
+         },
+      }
+   } catch (error: any) {
+      return {
+         props: {
+            error: "Unable to retrieve user information.",
+         },
+      }
    }
 }
