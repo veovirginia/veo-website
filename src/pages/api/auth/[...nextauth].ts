@@ -8,6 +8,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import _ from "lodash"
 import jwt, { verify } from "jsonwebtoken"
 import Credentials from "next-auth/providers/credentials"
+import nodemailer from "nodemailer"
 
 export const ONE_DAY = 86400
 export const SEVEN_DAYS = 604800
@@ -24,7 +25,44 @@ const EmailProvider = Email({
       },
    },
    from: process.env.EMAIL_FROM,
+   async sendVerificationRequest({
+      identifier: email,
+      url,
+      provider: { server, from },
+   }) {
+      const { host } = new URL(url)
+      const transport = nodemailer.createTransport(server)
+      await transport.sendMail({
+         to: email,
+         from,
+         subject: `Sign in to ${host}`,
+         text: text({ url, host }),
+         html: html({ url, host, email }),
+      })
+   },
 })
+
+function text({ url, host }: Record<"url" | "host", string>) {
+   return `Sign in to ${host}\n${url}\n\n`
+}
+
+function html({ url, host, email }: Record<"url" | "host" | "email", string>) {
+   // Insert invisible space into domains and email address to prevent both the
+   // email address and the domain from being turned into a hyperlink by email
+   // clients like Outlook and Apple mail, as this is confusing because it seems
+   // like they are supposed to click on their email address to sign in.
+   const escapedEmail = `${email.replace(/\./g, "&#8203;.")}`
+   const escapedHost = `${host.replace(/\./g, "&#8203;.")}`
+
+   // Some simple styling options
+   const backgroundColor = "#f9f9f9"
+
+   return `
+   <body style="background: ${backgroundColor};">
+   Sign in to ${escapedHost}. Your signin link is <a href="${url}" target="_blank">${url}</a>
+   </body>
+ `
+}
 
 const CredentialsProvider = Credentials({
    id: "refresh-session",

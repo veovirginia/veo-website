@@ -4,8 +4,8 @@
    "private": false,
    "scripts": {
       "dev": "doppler run next dev",
-      "build": "next build",
-      "start": "next start",
+      "build": "doppler run next build",
+      "start": "doppler run next start",
       "generate": "doppler run npx prisma generate",
       "studio": "doppler run npx prisma studio",
       "lint": "next lint"
@@ -41,6 +41,7 @@
       "@types/jsonwebtoken": "^9.0.0",
       "@types/lodash": "^4.14.191",
       "@types/node": "18.7.18",
+      "@types/nodemailer": "^6.4.7",
       "@types/react": "18.0.21",
       "@types/react-dom": "18.0.6",
       "autoprefixer": "^10.4.12",
