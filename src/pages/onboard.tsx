@@ -45,7 +45,7 @@ export default function Onboard({ data }: OnboardPageProps) {
    }, [])
 
    return (
-      <Layout>
+      <Layout page="Onboard" description="">
          <AnimatePresence>
             <div className="pt-12 min-h-[40rem] flex flex-col justify-between">
                <OnboardSteps />
