@@ -26,6 +26,7 @@ export default function Dashboard({ refreshSession }: DashboardProps) {
    }, [
       refreshSession,
       router.pathname,
+      //@ts-ignore
       session?.token,
       session?.user.email,
       session?.user.id,
