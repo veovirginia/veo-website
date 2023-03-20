@@ -33,7 +33,7 @@ const schema = yup.object().shape({
       .required("Expected graduation required"),
    major: yup
       .string()
-      .matches(/^[a-zA-Z ]+$/, "Must be a valid major")
+      .matches(/^[a-zA-Z- ]+$/, "Must be a valid major")
       .max(32, "Must not exceed 32 characters")
       .required("Primary major required"),
    idea: yup.string().max(32, "Must not exceed 32 characters"),
