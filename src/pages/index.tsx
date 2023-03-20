@@ -15,6 +15,10 @@ const Home: NextPage = () => {
                key="title"
             />
             <meta
+               property="og:description"
+               content="A community of builders at the University of Virginia. Join us to learn about entrepreneurship, how to get involved, and discover resources available to you."
+            />
+            <meta
                name="description"
                content="A community of builders at the University of Virginia. Join us to learn about entrepreneurship, how to get involved, and discover resources available to you."
                key="desc"
