@@ -57,20 +57,32 @@ export default function MemberRow({
                </p>
             </div>
          </div>
-         <AnimatePresence>
-            <div className="">
-               {selected === index && (
-                  <motion.div
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
-                     exit={{ opacity: 0 }}
-                     transition={{ duration: 0.15 }}
-                  >
-                     <BiCheck className="text-blue-500 text-2xl" />
-                  </motion.div>
-               )}
+         <div className="flex justify-end ml-2">
+            <div className="flex items-center justify-center w-4 h-4 rounded-full bg-transparent border border-noir-700/50">
+               <AnimatePresence>
+                  {selected === index ? (
+                     <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-2 w-2 bg-blue-ribbon-700 rounded-full"
+                     />
+                  ) : null}
+               </AnimatePresence>
             </div>
-         </AnimatePresence>
+            {/* {selected === index && (
+                     <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                     >
+                        <BiCheck className="text-blue-500 text-2xl" />
+                     </motion.div>
+                     
+                  )} */}
+         </div>
       </button>
    )
 }
