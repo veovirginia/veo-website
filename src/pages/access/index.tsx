@@ -1,5 +1,5 @@
-import { Input } from "../components/inputs"
-import Layout from "../components/layouts/Layout"
+import { Input } from "../../components/inputs"
+import Layout from "../../components/layouts/Layout"
 import { Controller, useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -7,8 +7,8 @@ import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { GetServerSidePropsContext } from "next"
 import { getSession } from "next-auth/react"
-import Alert from "../components/Alert"
-import { ArrowButton } from "../components/buttons"
+import Alert from "../../components/Alert"
+import { ArrowButton } from "../../components/buttons"
 
 interface FormFields {
    email: string
@@ -18,10 +18,10 @@ const schema = yup.object().shape({
    email: yup
       .string()
       .email("Invalid email")
-      // .matches(
-      //    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@virginia.edu/i,
-      //    "Must be a UVA email"
-      // )
+      .matches(
+         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@virginia.edu/i,
+         "Must be a UVA email"
+      )
       .required("Email required"),
 })
 
@@ -107,12 +107,13 @@ export default function Access() {
                   />
                </div>
                <ArrowButton
-                  text="Sign in"
                   type="submit"
                   disabled={!isValid}
                   direction="right"
                   className="w-full"
-               />
+               >
+                  Sign In
+               </ArrowButton>
             </form>
          </div>
       </Layout>

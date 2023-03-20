@@ -1,5 +1,4 @@
 import StepHeader from "./StepHeader"
-import cn from "classnames"
 import { useContext, useEffect, useState } from "react"
 import Cal, { getCalApi } from "@calcom/embed-react"
 import { OnboardContext } from "../../context/onboardContext"
@@ -72,7 +71,7 @@ export default function StepThree() {
          setVisible(true)
       }
 
-      // router.push("/pending")
+      router.push("/pending")
    }
 
    return (
@@ -116,19 +115,21 @@ export default function StepThree() {
             </div>
             <div className="max-w-2xl mx-auto w-full flex justify-between items-center pb-10">
                <Button
-                  text="Back"
                   type="button"
                   variant="secondary"
                   className="w-24"
                   onClick={backHandler}
-               />
+               >
+                  Back
+               </Button>
                <Button
-                  text="Finish"
                   type="button"
                   className="w-32"
                   disabled={!isScheduled}
                   onClick={submitHandler}
-               />
+               >
+                  Finish
+               </Button>
             </div>
          </motion.div>
       </div>

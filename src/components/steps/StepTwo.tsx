@@ -106,20 +106,22 @@ export default function StepTwo() {
             </div>
             <div className="flex justify-between items-center ">
                <Button
-                  text="Back"
                   type="button"
                   variant="secondary"
                   className="w-24"
                   onClick={backHandler}
-               />
+               >
+                  Back
+               </Button>
                <ArrowButton
-                  text="Next"
                   type="button"
                   disabled={selectedRow === undefined || selectedRow < 0}
                   direction="right"
                   className="w-32"
                   onClick={nextButton}
-               />
+               >
+                  Next
+               </ArrowButton>
             </div>
          </motion.div>
       </motion.div>

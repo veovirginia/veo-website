@@ -1,9 +1,8 @@
-import { motion } from "framer-motion"
-import { useState } from "react"
 import cn from "classnames"
+import { ReactNode } from "react"
 
 interface ButtonProps {
-   text: string
+   children: ReactNode
    type: "button" | "submit"
    variant: "primary" | "secondary"
    className?: string
@@ -12,7 +11,7 @@ interface ButtonProps {
 }
 
 export default function Button({
-   text,
+   children,
    type,
    variant,
    className,
@@ -28,22 +27,20 @@ export default function Button({
             "text-sm transition-colors duration-125 px-2 py-2 border rounded flex justify-center items-center space-x-2 font-sans",
             // Primary Variant
             {
-               "bg-zinc-50 text-neutral-900 border-zinc-50":
+               "bg-zinc-50 text-neutral-900 border-zinc-50 focus:bg-zinc-300 focus:border-zinc-300":
                   !disabled && variant === "primary",
                "bg-noir-800/30 text-noir-600 border-noir-800 cursor-not-allowed":
                   disabled && variant === "primary",
             },
             // Secondary Variant
             {
-               "rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200 hover:bg-noir-800/20":
+               "rounded border px-4 py-2 bg-transparent border-noir-800 text-noir-200 hover:bg-noir-800/20 focus:bg-noir-800/40":
                   !disabled && variant === "secondary",
             },
             className
          )}
       >
-         <div className="flex items-center space-x-2">
-            <span>{text}</span>
-         </div>
+         <div className="flex items-center space-x-2">{children}</div>
       </button>
    )
 }
