@@ -24,7 +24,7 @@ const EmailProvider = Email({
          pass: process.env.EMAIL_PASSWORD,
       },
    },
-   from: "Virginia Entrepreneurship Organization",
+   from: `Virginia Entrepreneurship Organization <${process.env.EMAIL_USER}>`,
    async sendVerificationRequest({
       identifier: email,
       url,
