@@ -20,7 +20,7 @@ export default function Layout({ page, description, children }: LayoutProps) {
                content={`Virginia Entrepreneurship Organization | ${page}`}
                key="title"
             />
-            <meta name="description" content={description} key="desc" />
+            <meta property="og:description" content={description} />
             <link
                rel="apple-touch-icon"
                sizes="180x180"
