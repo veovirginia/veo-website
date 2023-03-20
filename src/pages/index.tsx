@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 import { SiSubstack, SiInstagram } from "react-icons/si"
 import Head from "next/head"
 import Link from "next/link"
+import { Button } from "../components/buttons"
 
 const Home: NextPage = () => {
    return (
@@ -83,12 +84,9 @@ const Home: NextPage = () => {
                </p>
                <div className="pt-4">
                   <Link href="/access">
-                     <button
-                        type="button"
-                        className="text-zinc-50 bg-blue-ribbon-700 hover:bg-blue-ribbon-600 focus:bg-blue-ribbon-800 duration-100 ease-in text-sm px-4 py-2 rounded"
-                     >
+                     <Button type="button" className="mx-auto">
                         Go to Platform
-                     </button>
+                     </Button>
                   </Link>
                </div>
             </div>

@@ -49,7 +49,7 @@ export default function Pending() {
                <div>
                   <div className="pt-12 flex flex-col justify-between text-center">
                      {/* Put graphic here */}
-                     <h1 className="font-semibold text-zinc-50 text-3xl">
+                     <h1 className="font-semibold text-zinc-50 text-3xl font-display">
                         Hang tight!
                      </h1>
                      <p className="text-base font-regular tracking-wide pt-1 text-noir-300">
@@ -65,12 +65,13 @@ export default function Pending() {
                </div>
                <Link href="/onboard">
                   <Button
-                     text="Back to Onboarding"
                      className="mt-8 w-fit mx-auto"
                      variant="secondary"
                      onClick={() => router.push("/onboard")}
-                     type={"button"}
-                  />
+                     type="button"
+                  >
+                     Back to Onboarding
+                  </Button>
                </Link>
             </div>
          </AnimatePresence>

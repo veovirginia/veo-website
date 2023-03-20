@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react"
-import cn from "classnames"
 import { Input } from "../inputs"
 import StepHeader from "./StepHeader"
 import { useForm, Controller } from "react-hook-form"
@@ -175,13 +174,14 @@ export default function StepOne() {
                </div>
                <div className="flex justify-center">
                   <ArrowButton
-                     text="Continue"
                      type="button"
                      disabled={!isValid}
                      direction="right"
                      className="w-32"
                      onClick={nextHandler}
-                  />
+                  >
+                     Continue
+                  </ArrowButton>
                </div>
             </motion.form>
          )}

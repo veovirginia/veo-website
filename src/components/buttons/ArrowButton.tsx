@@ -1,9 +1,9 @@
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { ReactNode, useState } from "react"
 import cn from "classnames"
 
 interface ButtonProps {
-   text: string
+   children: ReactNode
    type: "button" | "submit"
    className?: string
    disabled?: boolean
@@ -12,7 +12,7 @@ interface ButtonProps {
 }
 
 export default function ArrowButton({
-   text,
+   children,
    type,
    className,
    disabled,
@@ -65,7 +65,7 @@ export default function ArrowButton({
                   </svg>
                </motion.div>
             ) : null}
-            <span>{text}</span>
+            <span>{children}</span>
             {direction === "right" ? (
                <motion.div
                   animate={{

@@ -19,14 +19,14 @@ const Navbar = () => {
          </Link>
          <div className="flex items-center space-x-8 text-sm">
             {session?.user ? (
-               <Button onClick={() => signOut()} type="button" text="Log out" />
+               <Button onClick={() => signOut()} type="button">
+                  Logout
+               </Button>
             ) : (
                <Link href="/access" passHref>
-                  <Button
-                     type="button"
-                     text="Platform Access"
-                     variant="secondary"
-                  />
+                  <Button type="button" variant="secondary">
+                     Platform Access
+                  </Button>
                </Link>
             )}
          </div>
