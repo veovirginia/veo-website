@@ -34,12 +34,13 @@ const members = [
       grad: "2025",
       calendar: "michael-fatemi-vnsw6q/veo-onboard-meeting",
    },
-   // {
-   //    name: "Clara Grimmelbein",
-   //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
-   //    major: "Computer Science + Commerce",
-   //    grad: "2026",
-   // },
+   {
+      name: "Clara Grimmelbein",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
+      major: "Computer Science + Commerce",
+      grad: "2026",
+      calendar: "claragrimmelbein/veo-onboard-meeting",
+   },
    // {
    //    name: "Daivik Siddhi",
    //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
