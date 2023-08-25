@@ -7,13 +7,6 @@ import { ArrowButton, Button } from "../buttons"
 
 const members = [
    {
-      name: "Alex Becker",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328098/alex_photo.png",
-      major: "Computer Science + Commerce",
-      grad: "2023",
-      calendar: "alexmbckr/veo-onboard-meeting",
-   },
-   {
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
       major: "Computer Science + Commerce",
