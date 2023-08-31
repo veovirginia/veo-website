@@ -50,9 +50,6 @@ const Home: NextPage = () => {
             <meta name="theme-color" content="#ffffff" />
          </Head>
          <main className="w-full min-h-screen p-4 flex flex-col max-w-5xl mx-auto">
-            <p className="text-neutral-500 text-sm p-4 mx-auto">
-               🚧 Our website is currently under construction. 🚧
-            </p>
             <div className="mx-auto text-center mt-auto">
                <div className="mb-6 flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#2a63ff] via-[#5530ed] to-[#ea3be1] mx-auto">
                   <svg
