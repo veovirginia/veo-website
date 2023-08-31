@@ -34,12 +34,12 @@ const members = [
       grad: "2026",
       calendar: "claragrimmelbein/veo-onboard-meeting",
    },
-   // {
-   //    name: "Daivik Siddhi",
-   //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
-   //    major: "Computer Science + Economics",
-   //    grad: "2025",
-   // },
+   {
+      name: "Shaurya Bedi",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1693523118/shaurya_photo.png",
+      major: "Computer Science + Economics",
+      grad: "2025",
+   },
 ]
 
 export default function StepTwo() {
