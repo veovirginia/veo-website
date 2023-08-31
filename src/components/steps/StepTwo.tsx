@@ -39,6 +39,7 @@ const members = [
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1693523118/shaurya_photo.png",
       major: "Computer Science + Economics",
       grad: "2025",
+      calendar: "shaurya-bedi/veo-onboard-meeting",
    },
 ]
 
@@ -58,8 +59,6 @@ export default function StepTwo() {
          const { updateMeeting, updateStep } = formContext
          // Better than `if (selectedRow)` because this method counts 0 as valid
          if (selectedRow !== undefined) {
-            console.log("sel row: ", selectedRow)
-            console.log(members[selectedRow])
             updateMeeting({
                member: {
                   name: members[selectedRow].name,
@@ -86,7 +85,7 @@ export default function StepTwo() {
             className="flex flex-col h-full px-4"
          >
             <div className="my-8 max-h-[24rem] overflow-auto">
-               {members.map((member, i) => {
+               {_.shuffle(members).map((member, i) => {
                   return (
                      <MemberRow
                         index={i}
