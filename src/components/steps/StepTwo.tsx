@@ -4,6 +4,7 @@ import { useContext, useState } from "react"
 import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
 import { ArrowButton, Button } from "../buttons"
+import _ from "lodash"
 
 const members = [
    {
