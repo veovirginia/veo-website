@@ -27,7 +27,6 @@ export default function OnboardProvider({ children }: OnboardProviderProps) {
       meeting: {
          member: {
             name: "",
-            index: -1,
             calendar: "",
          },
          isScheduled: false,
