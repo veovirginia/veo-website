@@ -11,14 +11,14 @@ const members = [
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
       major: "Computer Science + Commerce",
-      grad: "2024",
+      grad: "2025",
       calendar: "jasonjche/veo-onboard-meeting",
    },
    {
       name: "David Xiang",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318501/david_photo.png",
       major: "Computer Science + Statistics",
-      grad: "2024",
+      grad: "2025",
       calendar: "davidxiang/veo-onboard-meeting",
    },
    {
