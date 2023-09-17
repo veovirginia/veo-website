@@ -4,15 +4,9 @@ import { useContext, useState } from "react"
 import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
 import { ArrowButton, Button } from "../buttons"
+import _ from "lodash"
 
 const members = [
-   {
-      name: "Alex Becker",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328098/alex_photo.png",
-      major: "Computer Science + Commerce",
-      grad: "2023",
-      calendar: "alexmbckr/veo-onboard-meeting",
-   },
    {
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
@@ -41,12 +35,13 @@ const members = [
       grad: "2026",
       calendar: "claragrimmelbein/veo-onboard-meeting",
    },
-   // {
-   //    name: "Daivik Siddhi",
-   //    image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676327863/daivik_photo.png",
-   //    major: "Computer Science + Economics",
-   //    grad: "2025",
-   // },
+   {
+      name: "Shaurya Bedi",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1693523118/shaurya_photo.png",
+      major: "Computer Science + Economics",
+      grad: "2025",
+      calendar: "shaurya-bedi/veo-onboard-meeting",
+   },
 ]
 
 export default function StepTwo() {
@@ -65,8 +60,6 @@ export default function StepTwo() {
          const { updateMeeting, updateStep } = formContext
          // Better than `if (selectedRow)` because this method counts 0 as valid
          if (selectedRow !== undefined) {
-            console.log("sel row: ", selectedRow)
-            console.log(members[selectedRow])
             updateMeeting({
                member: {
                   name: members[selectedRow].name,
@@ -93,7 +86,7 @@ export default function StepTwo() {
             className="flex flex-col h-full px-4"
          >
             <div className="my-8 max-h-[24rem] overflow-auto">
-               {members.map((member, i) => {
+               {_.shuffle(members).map((member, i) => {
                   return (
                      <MemberRow
                         index={i}
