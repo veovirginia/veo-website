@@ -5,20 +5,21 @@ import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
 import { ArrowButton, Button } from "../buttons"
 import _ from "lodash"
+import { OnboardContextMember } from "../../types/types"
 
 const members = [
    {
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
       major: "Computer Science + Commerce",
-      grad: "2024",
+      grad: "2025",
       calendar: "jasonjche/veo-onboard-meeting",
    },
    {
       name: "David Xiang",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318501/david_photo.png",
       major: "Computer Science + Statistics",
-      grad: "2024",
+      grad: "2025",
       calendar: "davidxiang/veo-onboard-meeting",
    },
    {
@@ -46,8 +47,8 @@ const members = [
 
 export default function StepTwo() {
    const formContext = useContext(OnboardContext)
-   const [selectedRow, setRow] = useState(
-      formContext?.formValues.meeting.member.index
+   const [selectedRow, setRow] = useState<OnboardContextMember | null>(
+      formContext?.formValues.meeting.member ?? null
    )
    const backHandler = () => {
       if (formContext) {
@@ -58,13 +59,11 @@ export default function StepTwo() {
    const nextButton = () => {
       if (formContext) {
          const { updateMeeting, updateStep } = formContext
-         // Better than `if (selectedRow)` because this method counts 0 as valid
-         if (selectedRow !== undefined) {
+         if (selectedRow) {
             updateMeeting({
                member: {
-                  name: members[selectedRow].name,
-                  calendar: members[selectedRow].calendar,
-                  index: selectedRow,
+                  name: selectedRow.name,
+                  calendar: selectedRow.calendar,
                },
                isScheduled: false,
             })
@@ -92,7 +91,7 @@ export default function StepTwo() {
                         index={i}
                         key={member.name}
                         {...member}
-                        onclick={() => setRow(i)}
+                        onclick={() => setRow(member)}
                         selected={selectedRow}
                      />
                   )
@@ -109,7 +108,7 @@ export default function StepTwo() {
                </Button>
                <ArrowButton
                   type="button"
-                  disabled={selectedRow === undefined || selectedRow < 0}
+                  disabled={!selectedRow}
                   direction="right"
                   className="w-32"
                   onClick={nextButton}

@@ -55,6 +55,5 @@ export interface OnboardContextMeeting {
 
 export interface OnboardContextMember {
    name: string
-   index: number
    calendar: string
 }

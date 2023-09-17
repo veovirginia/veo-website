@@ -2,6 +2,7 @@ import { BiCheck } from "react-icons/bi"
 import cn from "classnames"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
+import { OnboardContextMember } from "../types/types"
 
 interface MemberRowProps {
    index: number
@@ -10,7 +11,7 @@ interface MemberRowProps {
    major: string
    grad: string
    onclick: (idx: number) => void
-   selected: number | undefined
+   selected: OnboardContextMember | null
 }
 
 export default function MemberRow({
@@ -29,7 +30,7 @@ export default function MemberRow({
             "relative p-3 flex w-full items-center justify-between hover:bg-noir-800/20 transition-colors ease-in duration-100 border-noir-700/50 border-t last:border-b border-x first:rounded-t last:rounded-b"
          )}
       >
-         {selected === index && (
+         {selected?.name === name && (
             <motion.div
                layoutId="activeMember"
                initial={{
@@ -60,7 +61,7 @@ export default function MemberRow({
          <div className="flex justify-end ml-2">
             <div className="flex items-center justify-center w-4 h-4 rounded-full bg-transparent border border-noir-700/50">
                <AnimatePresence>
-                  {selected === index ? (
+                  {selected?.name === name ? (
                      <motion.div
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
