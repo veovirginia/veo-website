@@ -4,10 +4,16 @@ import { useContext, useState } from "react"
 import { OnboardContext } from "../../context/onboardContext"
 import { motion } from "framer-motion"
 import { ArrowButton, Button } from "../buttons"
-import _ from "lodash"
 import { OnboardContextMember } from "../../types/types"
 
 const members = [
+   {
+      name: "Clara Grimmelbein",
+      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
+      major: "Computer Science + Commerce",
+      grad: "2026",
+      calendar: "claragrimmelbein/veo-onboard-meeting",
+   },
    {
       name: "Jason He",
       image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676328034/jason_photo.png",
@@ -28,13 +34,6 @@ const members = [
       major: "Computer Science",
       grad: "2025",
       calendar: "michael-fatemi-vnsw6q/veo-onboard-meeting",
-   },
-   {
-      name: "Clara Grimmelbein",
-      image: "https://res.cloudinary.com/dblodzwva/image/upload/v1676318421/clara_photo.png",
-      major: "Computer Science + Commerce",
-      grad: "2026",
-      calendar: "claragrimmelbein/veo-onboard-meeting",
    },
    {
       name: "Shaurya Bedi",
@@ -85,7 +84,7 @@ export default function StepTwo() {
             className="flex flex-col h-full px-4"
          >
             <div className="my-8 max-h-[24rem] overflow-auto">
-               {_.shuffle(members).map((member, i) => {
+               {members.map((member, i) => {
                   return (
                      <MemberRow
                         index={i}
